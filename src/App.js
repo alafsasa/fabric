@@ -1,23 +1,32 @@
-import logo from './logo.svg';
+import React, {useEffect, useRef} from 'react';
 import './App.css';
+import { fabric } from 'fabric';
 
 function App() {
+  const kanvas = useRef();
+  useEffect(()=>{
+    if(kanvas.current){
+      const canvas = kanvas.current;
+      //console.log(canvas)
+      const c = new fabric.Canvas(canvas);
+      const rect = new fabric.Rect({
+        top: 100,
+        left: 100,
+        width: 60,
+        height: 70,
+        fill: 'red'
+      });
+      c.add(rect)
+    }
+  })
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="container">
+      <div className='row'>
+        <div className='col-sm-12'>
+          <div className='display-4 text-center'>FabricJs</div>
+          <canvas ref={kanvas} className="cv" height={400} width={400}></canvas>
+        </div>
+      </div>
     </div>
   );
 }
