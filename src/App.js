@@ -7,12 +7,56 @@ import { faBucket, faCircle, faDrawPolygon, faEraser, faImage, faPen, faSave, fa
 function App() {
   const kanvas = useRef();
   useEffect(()=>{
-    if(kanvas.current){
-      const canvas = kanvas.current;
-      //console.log(canvas)
-      const c = new fabric.Canvas(canvas, {backgroundColor: '#ddd'});
-    }
-  })
+    //if(kanvas.current){
+    //  const canvas = kanvas.current;
+    //  //console.log(canvas)
+    //  const c = new fabric.Canvas(canvas, {backgroundColor: '#ddd'});
+    //  c.selection = false;
+    //  //const rect, isDown, origX, origY = true;
+    //  function drawRectangle(){}
+//
+    //}
+    let rect, isDown, origX, origY = true;
+    let canvas = new fabric.Canvas(kanvas.current, {backgroundColor: '#ddd'});
+    //mousedown
+    canvas.on('mouse:down', (o)=>{
+      isDown = true;
+      const pointer = canvas.getPointer(o.e);
+      origX = pointer.x;
+      origY = pointer.y;
+      //rect
+      rect = new fabric.Rect({
+        left: origX,
+        top: origY,
+        width: pointer.x-origX,
+        height: pointer.y-origY,
+        fill: 'red',
+        stroke: 'blue',
+        type: 'rect',
+        strokeWidth: 2
+      });
+      canvas.add(rect);
+    });
+    //mousemove
+    canvas.on('mouse:move', (o)=>{
+      if(isDown){
+        const pointer = canvas.getPointer(o.e);
+        if(origX>pointer.x){
+          rect.set({left: Math.abs(pointer.x)});
+        }
+        if(origY>pointer.y){
+          rect.set({top: Math.abs(pointer.y)});
+        }
+        rect.set({width: Math.abs(origX-pointer.x)});
+        rect.set({height: Math.abs(origY-pointer.y)});
+      }
+    });
+    //mouseup
+    canvas.on('mouse:up', (o)=>{
+      isDown = false;
+      
+    });
+  });
   return (
     <div className="container">
       <div className='row'>
