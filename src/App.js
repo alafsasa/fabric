@@ -2,7 +2,7 @@ import React, {useEffect, useRef} from 'react';
 import './App.css';
 import { fabric } from 'fabric';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBucket, faCircle, faDrawPolygon, faEraser, faImage, faPen, faSave, faSquare, faTextWidth, faTrash, faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
+import { faArrowPointer, faBucket, faCircle, faDrawPolygon, faEraser, faImage, faPen, faSave, faSquare, faTextWidth, faTrash, faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
 
 function App() {
   const kanvas = useRef();
@@ -16,46 +16,49 @@ function App() {
     //  function drawRectangle(){}
 //
     //}
-    let rect, isDown, origX, origY = true;
-    let canvas = new fabric.Canvas(kanvas.current, {backgroundColor: '#ddd'});
+    let isDown = false;
+    let origX, origY, rect;
+    const canvas = new fabric.Canvas(kanvas.current, {backgroundColor: '#ddd'});
     //mousedown
     canvas.on('mouse:down', (o)=>{
+      var pointer = canvas.getPointer(o.e);
+      //console.log(pointer);
+      //set is down to true
       isDown = true;
-      const pointer = canvas.getPointer(o.e);
       origX = pointer.x;
       origY = pointer.y;
-      //rect
       rect = new fabric.Rect({
         left: origX,
         top: origY,
-        width: pointer.x-origX,
-        height: pointer.y-origY,
-        fill: 'red',
-        stroke: 'blue',
-        type: 'rect',
+        fill: '',
+        stroke: 'red',
         strokeWidth: 2
       });
       canvas.add(rect);
     });
     //mousemove
     canvas.on('mouse:move', (o)=>{
-      if(isDown){
-        const pointer = canvas.getPointer(o.e);
-        if(origX>pointer.x){
-          rect.set({left: Math.abs(pointer.x)});
-        }
-        if(origY>pointer.y){
-          rect.set({top: Math.abs(pointer.y)});
-        }
-        rect.set({width: Math.abs(origX-pointer.x)});
-        rect.set({height: Math.abs(origY-pointer.y)});
+      if(!isDown){
+        return;
       }
+      var pointer = canvas.getPointer(o.e);
+      if(origX>pointer.x){
+        rect.set({left: Math.abs(pointer.x)});
+      }
+      if(origY>pointer.y){
+        rect.set({top: Math.abs(pointer.y)});
+      }
+      //otherwise
+      rect.set({width: Math.abs(origX - pointer.x)});
+      rect.set({height: Math.abs(origY - pointer.y)});
+      canvas.renderAll();
+      //console.log(origX + ',' + origY)
     });
     //mouseup
     canvas.on('mouse:up', (o)=>{
       isDown = false;
-      
     });
+    //if theres active selection no drawing
   });
   return (
     <div className="container">
@@ -93,6 +96,9 @@ function App() {
             </button>
             <button className='btn'>
               <FontAwesomeIcon icon={faTrash} size="2x" /> Delete
+            </button>
+            <button className='btn'>
+              <FontAwesomeIcon icon={faArrowPointer} size="2x" /> Select
             </button>
             <button className='btn'>
               <FontAwesomeIcon icon={faSave} size="2x" /> Save
