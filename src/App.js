@@ -5,61 +5,61 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowPointer, faBucket, faCircle, faDrawPolygon, faEraser, faImage, faPen, faSave, faSquare, faTextWidth, faTrash, faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
 
 function App() {
+  //const [isRectActive, setIsRectActive] = useState(false);
   const kanvas = useRef();
+  var isRectActive = false;
+  //configure flags
   useEffect(()=>{
-    //if(kanvas.current){
-    //  const canvas = kanvas.current;
-    //  //console.log(canvas)
-    //  const c = new fabric.Canvas(canvas, {backgroundColor: '#ddd'});
-    //  c.selection = false;
-    //  //const rect, isDown, origX, origY = true;
-    //  function drawRectangle(){}
-//
-    //}
-    let isDown = false;
-    let origX, origY, rect;
-    const canvas = new fabric.Canvas(kanvas.current, {backgroundColor: '#ddd'});
+    var paper = new fabric.Canvas(kanvas.current, {backgroundColor: '#ddd'});
+    var isDown = false;
+    var origX, origY, rect;
     //mousedown
-    canvas.on('mouse:down', (o)=>{
-      var pointer = canvas.getPointer(o.e);
-      //console.log(pointer);
-      //set is down to true
+    paper.on('mouse:down', (o)=>{
+      var pointer = paper.getPointer(o.e);
+      //console.log(pointer)
       isDown = true;
       origX = pointer.x;
       origY = pointer.y;
-      rect = new fabric.Rect({
-        left: origX,
-        top: origY,
-        fill: '',
-        stroke: 'red',
-        strokeWidth: 2
-      });
-      canvas.add(rect);
+      console.log(isRectActive)
+      //check if rectangle is active
+      if(isRectActive === true){
+        rect = new fabric.Rect({
+          left: origX,
+          top: origY,
+          fill: '',
+          stroke: 'red',
+          strokeWidth: 2
+        });
+        paper.add(rect);
+      }
     });
     //mousemove
-    canvas.on('mouse:move', (o)=>{
-      if(!isDown){
-        return;
+    paper.on('mouse:move', (o)=>{
+      if(!isDown){return;}
+      var pointer = paper.getPointer(o.e);
+      //check is rect is active
+      if(isRectActive === true){
+        if(origX > pointer.x){
+          rect.set({left: Math.abs(pointer.x)});
+        }
+        if(origY > pointer.y){
+          rect.set({top: Math.abs(pointer.y)});
+        }
+        //otherwise
+        rect.set({width: Math.abs(origX - pointer.x)});
+        rect.set({height: Math.abs(origY - pointer.y)});
+        paper.renderAll();
       }
-      var pointer = canvas.getPointer(o.e);
-      if(origX>pointer.x){
-        rect.set({left: Math.abs(pointer.x)});
-      }
-      if(origY>pointer.y){
-        rect.set({top: Math.abs(pointer.y)});
-      }
-      //otherwise
-      rect.set({width: Math.abs(origX - pointer.x)});
-      rect.set({height: Math.abs(origY - pointer.y)});
-      canvas.renderAll();
-      //console.log(origX + ',' + origY)
     });
-    //mouseup
-    canvas.on('mouse:up', (o)=>{
+    //mouse up
+    paper.on('mouse:up', (o)=>{
       isDown = false;
     });
-    //if theres active selection no drawing
-  });
+  }, [isRectActive]); //the second empty array ensure we execute the function only once
+  //set flag functions
+  function activateRect(){
+    isRectActive = true;
+  }
   return (
     <div className="container">
       <div className='row'>
@@ -67,7 +67,7 @@ function App() {
           <div className='display-4 text-center'>FabricJs - Meme Creator</div>
           <canvas ref={kanvas} className="cv" height={700} width={700}></canvas>
           <div className='mt-3 bg-info'>
-            <button className='btn'>
+            <button className='btn' onClick={activateRect}>
               <FontAwesomeIcon icon={faSquare} size="2x" /> Rectangle/Square
             </button>
             <button className='btn'>
