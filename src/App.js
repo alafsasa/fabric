@@ -12,7 +12,7 @@ function App() {
   useEffect(()=>{
     var paper = new fabric.Canvas(kanvas.current, {backgroundColor: '#ddd'});
     var isDown, objSelected = false;
-    var originX, originY, rect = null;
+    var originX, originY, rect, sl = null;
     
     //mouse down
     paper.on('mouse:down', (o)=>{
@@ -24,13 +24,14 @@ function App() {
       //set is down flag to 1
       isDown = true
       //if object is selected
-      var sl = paper.getActiveObject();
+      sl = paper.getActiveObject();
       if(sl === undefined || sl === null){
         console.log('no objects!')
         objSelected = false;
       }else{
         console.log(sl)
         objSelected = true;
+
       }
       if(objSelected === false){
               //init rect
@@ -74,7 +75,7 @@ function App() {
   }, []); //the second empty array ensure we execute the function only once
   //delete objects
   const deleteObjects = () => {
-    //logics
+    //logic
   }
   return (
     <div className="container">
