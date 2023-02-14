@@ -1,12 +1,14 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import './App.css';
 import { fabric } from 'fabric';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 
 function App() {
-  //const [isRectActive, setIsRectActive] = useState(false);
+  const [isRectActive, setIsRectActive] = useState(false);
   const kanvas = useRef();
+  const y = useRef();
+  y.current = isRectActive;
   
   //configure flags
   useEffect(()=>{
@@ -29,21 +31,23 @@ function App() {
         console.log('no objects!')
         objSelected = false;
       }else{
-        console.log(sl)
         objSelected = true;
-
       }
       if(objSelected === false){
-              //init rect
-      rect = new fabric.Rect({
-        left: originX,
-        top: originY,
-        fill:'',
-        stroke: 'red',
-        strokeWidth: 2,
-      });
-      paper.add(rect);
-      }
+          //init rect
+          rect = new fabric.Rect({
+            left: originX,
+            top: originY,
+            fill:'',
+            stroke: 'red',
+            strokeWidth: 2,
+          });
+          paper.add(rect);
+        }
+        if(objSelected === true && y.current === true){
+          console.log(sl)
+          console.log('yess')
+        }
     });
     //mouse move/drag
     paper.on('mouse:move', (o)=>{
@@ -70,12 +74,15 @@ function App() {
     //mouse up
     paper.on('mouse:up', (o)=>{
       isDown = false;
-    })
-    //rect
+    });
   }, []); //the second empty array ensure we execute the function only once
   //delete objects
   const deleteObjects = () => {
     //logic
+    setIsRectActive(true);
+  }
+  const testMe = () => {
+    console.log(isRectActive)
   }
   return (
     <div className="container">
@@ -87,6 +94,7 @@ function App() {
             <button className='btn'>
               <FontAwesomeIcon icon={faTrashAlt} size="2x" /> Delete objects
             </button>
+            <button onClick={testMe}>test</button>
           </div>
         </div>
       </div>
