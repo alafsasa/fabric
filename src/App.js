@@ -4,60 +4,78 @@ import { fabric } from 'fabric';
 
 
 function App() {
-  const [cv, setCv] = useState(null);
+  const [paper, setPaper] = useState(null);
   const kanvas = useRef();
 
-  function someFunc(x){
+  //get canvas
+  function exposeCanvas(canvas){
     //console.log(x)
-    setCv(x);
+    setPaper(canvas);
   }
   //logic
   useEffect(()=>{
-    var paper = new fabric.Canvas(kanvas.current, {backgroundColor: '#ddd'});
-    //paper.add(new fabric.Rect({top: 100, left: 100, width: 100, height: 100, fill: 'red'}));
-    someFunc(paper);
-
+    var canvas = new fabric.Canvas(kanvas.current, {backgroundColor: '#ddd'});
+    //make canvas publicly available
+    exposeCanvas(canvas);
+    //draw shapes
+    //use canvas
+    var isDown = false;
+    var originX, originY, rect = null;
     //mousedown
-    console.log('tracker - x1')
-    paper.on('mouse:down', (o)=>{
-      console.log('mouse down');
+    canvas.on('mouse:down', (o)=>{
+      isDown = true;
+      var pointer = canvas.getPointer(o.e);
+      originX = pointer.x;
+      originY = pointer.y;
+      //draw rect
+      rect = new fabric.Rect({
+        left: originX,
+        top: originY,
+        width: pointer.x-originX,
+        height: pointer.y-originY,
+        fill: '',
+        stroke: 'red',
+        strokeWidth: 5
+      });
+      canvas.add(rect);
     });
-    //mouse move
-    //paper.on('mouse:move', (o)=>{
-    //  console.log('mouse moving...🚶‍♂️');
-    //})
-    //mouseup
-    paper.on('mouse:up', (o)=>{
-      console.log('out');
-    })
-
+    //mousemove
+    canvas.on('mouse:move', (o)=>{
+      if(!isDown) return;
+      //else
+      var pointer = canvas.getPointer(o.e);
+      if(originX > pointer.x){
+        rect.set({left: Math.abs(pointer.x)});
+      }
+      if(originY > pointer.y){
+        rect.set({top: Math.abs(pointer.y)});
+      }
+      rect.set({width: Math.abs(originX - pointer.x)});
+      rect.set({height: Math.abs(originY - pointer.y)});
+      canvas.renderAll();
+    });
+    //mouse up
+    canvas.on('mouse:up', (o)=>{
+      isDown = false;
+    });
 
     //clear canvas
     return () => {
-      if(paper){
-        paper.dispose();
-        paper = undefined;
+      if(canvas){
+        canvas.dispose();
+        canvas = undefined;
       }
     }
   }, []);
-  function drawRect(){
-    const rect = new fabric.Rect({
-      top: 100,
-      left: 100,
-      width: 100,
-      height: 100,
-      fill: 'red'
-    });
-    cv.add(rect)
+
+  //handlers
+  //use paper
+  function isSelected(){
+    console.log(paper.getActiveObject())
   }
-  function deleteObj(){
-    console.log(cv)
-  }
-  function showSelectedObj(){
-    console.log(cv.getActiveObject())
-  }
-  function purgeObj(){
-    cv.remove(cv.getActiveObject());
+  //delete objects
+  const deleteObj = () => {
+    paper.remove(paper.getActiveObject());
   }
   return (
     <div className="container">
@@ -66,10 +84,8 @@ function App() {
           <div className='display-3'>FabricJs Meme Creator</div>
           <canvas ref={kanvas} width={500} height={500}></canvas>
           <div className='mt-3'>
-            <button className='btn btn-primary' onClick={deleteObj}>Click me</button>
-            <button className='btn btn-warning' onClick={drawRect}>Add Rect</button>
-            <button className='btn btn-info' onClick={showSelectedObj}>Active</button>
-            <button className='btn btn-danger' onClick={purgeObj}>Delete</button>
+            <button className='btn btn-info' onClick={isSelected}>is Selected</button>
+            <button className='btn btn-danger' onClick={deleteObj}>Delete</button>
           </div>
         </div>
       </div>
