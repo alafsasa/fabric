@@ -5,12 +5,20 @@ import { fabric } from 'fabric';
 
 function App() {
   const [paper, setPaper] = useState(null);
+  const [triangleFlag, setTriangleFlag] = useState(false);
   const kanvas = useRef();
+  var y = useRef();
+  y = triangleFlag;
 
   //get canvas
   function exposeCanvas(canvas){
     //console.log(x)
     setPaper(canvas);
+  }
+
+  function x(){
+    console.log('x-1')
+    return y;
   }
   //logic
   useEffect(()=>{
@@ -27,17 +35,18 @@ function App() {
       var pointer = canvas.getPointer(o.e);
       originX = pointer.x;
       originY = pointer.y;
+      console.log(x());
       //draw rect
-      rect = new fabric.Rect({
-        left: originX,
-        top: originY,
-        width: pointer.x-originX,
-        height: pointer.y-originY,
-        fill: '',
-        stroke: 'red',
-        strokeWidth: 5
-      });
-      canvas.add(rect);
+      //rect = new fabric.Rect({
+      //  left: originX,
+      //  top: originY,
+      //  width: pointer.x-originX,
+      //  height: pointer.y-originY,
+      //  fill: '',
+      //  stroke: 'red',
+      //  strokeWidth: 5
+      //});
+      //canvas.add(rect);
     });
     //mousemove
     canvas.on('mouse:move', (o)=>{
@@ -59,6 +68,9 @@ function App() {
       isDown = false;
     });
 
+    //some stuff
+    //console.log(tFlag);
+
     //clear canvas
     return () => {
       if(canvas){
@@ -77,6 +89,15 @@ function App() {
   const deleteObj = () => {
     paper.remove(paper.getActiveObject());
   }
+  //triangle
+  const toggleTriangleFlag = () => {
+    setTriangleFlag(true);
+    //y = true;
+  }
+  //unit test
+  function testMe(){
+    console.log(triangleFlag)
+  }
   return (
     <div className="container">
       <div className='row'>
@@ -86,6 +107,8 @@ function App() {
           <div className='mt-3'>
             <button className='btn btn-info' onClick={isSelected}>is Selected</button>
             <button className='btn btn-danger' onClick={deleteObj}>Delete</button>
+            <button className='btn btn-success' onClick={toggleTriangleFlag}>Triangle</button>
+            <button className='btn btn-warning' onClick={testMe}>Test</button>
           </div>
         </div>
       </div>
