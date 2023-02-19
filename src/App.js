@@ -5,6 +5,7 @@ import { fabric } from 'fabric';
 //global
 var drawRectFlag = false;
 var drawTriangleFlag = false;
+var drawCircleFlag = false;
 
 function App() {
   const [paper, setPaper] = useState(null);
@@ -23,7 +24,7 @@ function App() {
     //draw shapes
     //use canvas
     var isDown = false;
-    var originX, originY, rect = null;
+    var originX, originY, rect, ellipse = null;
     //mousedown
     canvas.on('mouse:down', (o)=>{
       isDown = true;
@@ -50,13 +51,29 @@ function App() {
         //set other to false;
         console.log('draw triangle');
       }
+      if(drawCircleFlag){
+        //logic
+        ellipse = new fabric.Ellipse({
+          left: originX,
+          top: originY,
+          originX: 'left',
+          originY : 'top',
+          rx: pointer.x - originX,
+          ry: pointer.y - originY,
+          angle: 0,
+          fill: '',
+          stroke: 'blue',
+          strokeWidth: 6
+        });
+        canvas.add(ellipse)
+      }
     });
     //mousemove
     canvas.on('mouse:move', (o)=>{
       if(!isDown) return;
       //else
+      var pointer = canvas.getPointer(o.e);
       if(drawRectFlag){
-        var pointer = canvas.getPointer(o.e);
         if(originX > pointer.x){
           rect.set({left: Math.abs(pointer.x)});
         }
@@ -65,10 +82,35 @@ function App() {
         }
         rect.set({width: Math.abs(originX - pointer.x)});
         rect.set({height: Math.abs(originY - pointer.y)});
-        canvas.renderAll();
       }else if(drawTriangleFlag){
         //logic
+      }else if(drawCircleFlag){
+        //logic
+        if(ellipse === null){
+          return;
+        }
+        //else
+        var rx = Math.abs(originX - pointer.x)/2;
+        var ry = Math.abs(originY - pointer.y)/2;
+        if(rx > ellipse.strokeWidth){
+          rx -= ellipse.strokeWidth/2;
+        }
+        if(ry > ellipse.strokeWidth){
+          ry -= ellipse.strokeWidth/2;
+        }
+        ellipse.set({rx: rx, ry: ry});
+        if(originX > pointer.x){
+          ellipse.set({originX: 'right'});
+        }else{
+          ellipse.set({originX: 'left'});
+        }
+        if(originY > pointer.y){
+          ellipse.set({originY: 'bottom'});
+        }else{
+          ellipse.set({originY: 'top'});
+        }
       }
+      canvas.renderAll();
     });
     //mouse up
     canvas.on('mouse:up', (o)=>{
@@ -101,6 +143,7 @@ function App() {
     //logic
     drawTriangleFlag = true;
     drawRectFlag = false;
+    drawCircleFlag = false;
   }
   //unit test
   function testMe(){
@@ -111,6 +154,13 @@ function App() {
   const drawRect = () => {
     //logic
     drawRectFlag = true;
+    drawTriangleFlag = false;
+    drawCircleFlag = false;
+  }
+  const toggleCircle = () => {
+    //logic
+    drawCircleFlag = true;
+    drawRectFlag = false;
     drawTriangleFlag = false;
   }
   return (
@@ -125,6 +175,7 @@ function App() {
             <button className='btn btn-success' onClick={toggleTriangleFlag}>Triangle</button>
             <button className='btn btn-warning' onClick={testMe}>Test</button>
             <button className='btn btn-info' onClick={drawRect}>Draw Rectangle</button>
+            <button className='btn btn-warning' onClick={toggleCircle}>Circle</button>
           </div>
         </div>
       </div>
