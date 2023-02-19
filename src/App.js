@@ -3,7 +3,8 @@ import './App.css';
 import { fabric } from 'fabric';
 
 //global
-var drawRectFlag, drawTriangleFlag= false;
+var drawRectFlag = false;
+var drawTriangleFlag = false;
 
 function App() {
   const [paper, setPaper] = useState(null);
@@ -30,9 +31,9 @@ function App() {
       originX = pointer.x;
       originY = pointer.y;
       //draw rect
+      //console.log(drawRectFlag)
       if(drawRectFlag){
         //set other to false
-        //drawTriangleFlag = false;
         rect = new fabric.Rect({
           left: originX,
           top: originY,
@@ -43,10 +44,10 @@ function App() {
           strokeWidth: 5
         });
         canvas.add(rect);
-      }else if(drawTriangleFlag){
+      }
+      if(drawTriangleFlag){
         //logic
-        //set other to false
-        //drawRectFlag = false;
+        //set other to false;
         console.log('draw triangle');
       }
     });
@@ -99,13 +100,18 @@ function App() {
   const toggleTriangleFlag = () => {
     //logic
     drawTriangleFlag = true;
+    drawRectFlag = false;
   }
   //unit test
   function testMe(){
     //logic
+    console.log(drawRectFlag);
+    console.log(drawTriangleFlag);
   }
   const drawRect = () => {
     //logic
+    drawRectFlag = true;
+    drawTriangleFlag = false;
   }
   return (
     <div className="container">
