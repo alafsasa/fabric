@@ -2,23 +2,17 @@ import React, { useEffect, useRef, useState } from 'react';
 import './App.css';
 import { fabric } from 'fabric';
 
+//global
+var drawRectFlag, drawTriangleFlag= false;
 
 function App() {
   const [paper, setPaper] = useState(null);
-  const [triangleFlag, setTriangleFlag] = useState(false);
   const kanvas = useRef();
-  var y = useRef();
-  y = triangleFlag;
 
   //get canvas
   function exposeCanvas(canvas){
     //console.log(x)
     setPaper(canvas);
-  }
-
-  function x(){
-    console.log('x-1')
-    return y;
   }
   //logic
   useEffect(()=>{
@@ -35,33 +29,45 @@ function App() {
       var pointer = canvas.getPointer(o.e);
       originX = pointer.x;
       originY = pointer.y;
-      console.log(x());
       //draw rect
-      //rect = new fabric.Rect({
-      //  left: originX,
-      //  top: originY,
-      //  width: pointer.x-originX,
-      //  height: pointer.y-originY,
-      //  fill: '',
-      //  stroke: 'red',
-      //  strokeWidth: 5
-      //});
-      //canvas.add(rect);
+      if(drawRectFlag){
+        //set other to false
+        //drawTriangleFlag = false;
+        rect = new fabric.Rect({
+          left: originX,
+          top: originY,
+          width: pointer.x-originX,
+          height: pointer.y-originY,
+          fill: '',
+          stroke: 'red',
+          strokeWidth: 5
+        });
+        canvas.add(rect);
+      }else if(drawTriangleFlag){
+        //logic
+        //set other to false
+        //drawRectFlag = false;
+        console.log('draw triangle');
+      }
     });
     //mousemove
     canvas.on('mouse:move', (o)=>{
       if(!isDown) return;
       //else
-      var pointer = canvas.getPointer(o.e);
-      if(originX > pointer.x){
-        rect.set({left: Math.abs(pointer.x)});
+      if(drawRectFlag){
+        var pointer = canvas.getPointer(o.e);
+        if(originX > pointer.x){
+          rect.set({left: Math.abs(pointer.x)});
+        }
+        if(originY > pointer.y){
+          rect.set({top: Math.abs(pointer.y)});
+        }
+        rect.set({width: Math.abs(originX - pointer.x)});
+        rect.set({height: Math.abs(originY - pointer.y)});
+        canvas.renderAll();
+      }else if(drawTriangleFlag){
+        //logic
       }
-      if(originY > pointer.y){
-        rect.set({top: Math.abs(pointer.y)});
-      }
-      rect.set({width: Math.abs(originX - pointer.x)});
-      rect.set({height: Math.abs(originY - pointer.y)});
-      canvas.renderAll();
     });
     //mouse up
     canvas.on('mouse:up', (o)=>{
@@ -69,7 +75,7 @@ function App() {
     });
 
     //some stuff
-    //console.log(tFlag);
+    console.log('render')
 
     //clear canvas
     return () => {
@@ -91,12 +97,15 @@ function App() {
   }
   //triangle
   const toggleTriangleFlag = () => {
-    setTriangleFlag(true);
-    //y = true;
+    //logic
+    drawTriangleFlag = true;
   }
   //unit test
   function testMe(){
-    console.log(triangleFlag)
+    //logic
+  }
+  const drawRect = () => {
+    //logic
   }
   return (
     <div className="container">
@@ -109,6 +118,7 @@ function App() {
             <button className='btn btn-danger' onClick={deleteObj}>Delete</button>
             <button className='btn btn-success' onClick={toggleTriangleFlag}>Triangle</button>
             <button className='btn btn-warning' onClick={testMe}>Test</button>
+            <button className='btn btn-info' onClick={drawRect}>Draw Rectangle</button>
           </div>
         </div>
       </div>
