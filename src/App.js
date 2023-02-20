@@ -7,6 +7,8 @@ var isSelectedFlag = false;
 var drawRectFlag = false;
 var drawTriangleFlag = false;
 var drawCircleFlag = false;
+var drawStraightLineFlag = false;
+var drawDashedLineFlag = false;
 
 function App() {
   const [paper, setPaper] = useState(null);
@@ -25,7 +27,7 @@ function App() {
     //draw shapes
     //use canvas
     var isDown = false;
-    var originX, originY, rect, ellipse = null;
+    var originX, originY, rect, ellipse, triangle, line = null;
     //mousedown
     canvas.on('mouse:down', (o)=>{
       isDown = true;
@@ -41,6 +43,7 @@ function App() {
       }
       originX = pointer.x;
       originY = pointer.y;
+      var points = [pointer.x, pointer.y, pointer.x, pointer.y];
       //draw rect
       //console.log(drawRectFlag)
       if(isSelectedFlag){
@@ -61,7 +64,17 @@ function App() {
         if(drawTriangleFlag){
           //logic
           //set other to false;
-          console.log('draw triangle');
+          triangle = new fabric.Triangle({
+            left: pointer.x,
+            top: pointer.y,
+            strokeWidth: 2,
+            width: pointer.x-originX,
+            height: pointer.y-originY,
+            stroke: 'green',
+            fill: 'yellow',
+            originX: 'center'
+          });
+          canvas.add(triangle);
         }
         //draw circle/ellipse
         if(drawCircleFlag){
@@ -79,6 +92,29 @@ function App() {
             strokeWidth: 6
           });
           canvas.add(ellipse)
+        }
+        if(drawStraightLineFlag){
+          //logic
+          line = new fabric.Line(points, {
+            strokeWidth: 4,
+            fill: 'red',
+            stroke: 'red',
+            originX: 'center',
+            originY: 'center'
+          });
+          canvas.add(line);
+        }
+        if(drawDashedLineFlag){
+          //logic
+          line = new fabric.Line(points, {
+            fill: 'red',
+            stroke: 'red',
+            originX: 'center',
+            originY: 'center',
+            strokeWidth: 4,
+            strokeDashArray: [15, 4]
+          });
+          canvas.add(line);
         }
       }
     });
@@ -110,6 +146,11 @@ function App() {
         //draw triangle
         if(drawTriangleFlag){
           //logic
+          if(triangle === null){
+            return;
+          }
+          //logic else
+          triangle.set({width: Math.abs(originX - pointer.x), height: Math.abs(originY - pointer.y)});
         }
         //draw circle/ellipse
         if(drawCircleFlag){
@@ -138,6 +179,22 @@ function App() {
             ellipse.set({originY: 'top'});
           }
         }
+        if(drawStraightLineFlag){
+          //logic
+          if(line === null){
+            return;
+          }
+          //else
+          line.set({x2: pointer.x, y2: pointer.y});
+        }
+        if(drawDashedLineFlag){
+          //logic
+          if(line === null){
+            return;
+          }
+          //else
+          line.set({x2: pointer.x, y2: pointer.y});
+        }
       }
       canvas.renderAll();
     });
@@ -147,7 +204,7 @@ function App() {
     });
 
     //some stuff
-    console.log('render')
+    console.log('render');
 
     //clear canvas
     return () => {
@@ -180,25 +237,53 @@ function App() {
     drawTriangleFlag = true;
     drawRectFlag = false;
     drawCircleFlag = false;
+    drawStraightLineFlag = false;
+    drawDashedLineFlag = false;
   }
   //unit test
   function testMe(){
     //logic
     console.log(drawRectFlag);
     console.log(drawTriangleFlag);
+    console.log(drawCircleFlag);
+    console.log(drawStraightLineFlag);
   }
   const drawRect = () => {
     //logic
     drawRectFlag = true;
     drawTriangleFlag = false;
     drawCircleFlag = false;
+    drawStraightLineFlag = false;
+    drawDashedLineFlag = false;
   }
   const toggleCircle = () => {
     //logic
     drawCircleFlag = true;
     drawRectFlag = false;
     drawTriangleFlag = false;
+    drawStraightLineFlag = false;
+    drawDashedLineFlag = false;
   }
+  //straight line
+  const toggleStraightLine = () => {
+    //logics
+    drawStraightLineFlag = true;
+    drawRectFlag = false;
+    drawTriangleFlag = false;
+    drawCircleFlag = false;
+    drawDashedLineFlag = false;
+  }
+
+  //draw dashed line
+  const toggleDashedLineFlag = () => {
+    //logics
+    drawDashedLineFlag = true;
+    drawStraightLineFlag = false;
+    drawRectFlag = false;
+    drawTriangleFlag = false;
+    drawCircleFlag = false;
+  }
+
   return (
     <div className="container">
       <div className='row'>
@@ -212,6 +297,8 @@ function App() {
             <button className='btn btn-warning' onClick={testMe}>Test</button>
             <button className='btn btn-info' onClick={drawRect}>Draw Rectangle</button>
             <button className='btn btn-warning' onClick={toggleCircle}>Circle</button>
+            <button className='btn btn-info' onClick={toggleStraightLine}>Straight Line</button>
+            <button className='btn btn-info' onClick={toggleDashedLineFlag}>Dashed Line</button>
           </div>
         </div>
       </div>
