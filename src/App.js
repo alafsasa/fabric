@@ -9,6 +9,7 @@ var drawTriangleFlag = false;
 var drawCircleFlag = false;
 var drawStraightLineFlag = false;
 var drawDashedLineFlag = false;
+var drawFreeHandFlag = false;
 
 function App() {
   const [paper, setPaper] = useState(null);
@@ -93,6 +94,7 @@ function App() {
           });
           canvas.add(ellipse)
         }
+        //draw straight line
         if(drawStraightLineFlag){
           //logic
           line = new fabric.Line(points, {
@@ -104,6 +106,7 @@ function App() {
           });
           canvas.add(line);
         }
+        //draw dashed line
         if(drawDashedLineFlag){
           //logic
           line = new fabric.Line(points, {
@@ -179,6 +182,7 @@ function App() {
             ellipse.set({originY: 'top'});
           }
         }
+        //draw straight line
         if(drawStraightLineFlag){
           //logic
           if(line === null){
@@ -187,6 +191,7 @@ function App() {
           //else
           line.set({x2: pointer.x, y2: pointer.y});
         }
+        //draw dashed line
         if(drawDashedLineFlag){
           //logic
           if(line === null){
@@ -194,6 +199,17 @@ function App() {
           }
           //else
           line.set({x2: pointer.x, y2: pointer.y});
+        }
+        //free hand drawing
+        if(drawFreeHandFlag){
+          //logics
+          canvas.isDrawingMode = true;
+            canvas.freeDrawingBrush.width = 5;
+            canvas.freeDrawingBrush.color = "#1034a6";
+            canvas.on('path:created', (e) =>{
+              e.path.set();
+          });
+          //
         }
       }
       canvas.renderAll();
@@ -239,6 +255,7 @@ function App() {
     drawCircleFlag = false;
     drawStraightLineFlag = false;
     drawDashedLineFlag = false;
+    drawFreeHandFlag = false;
   }
   //unit test
   function testMe(){
@@ -255,6 +272,7 @@ function App() {
     drawCircleFlag = false;
     drawStraightLineFlag = false;
     drawDashedLineFlag = false;
+    drawFreeHandFlag = false;
   }
   const toggleCircle = () => {
     //logic
@@ -263,6 +281,7 @@ function App() {
     drawTriangleFlag = false;
     drawStraightLineFlag = false;
     drawDashedLineFlag = false;
+    drawFreeHandFlag = false;
   }
   //straight line
   const toggleStraightLine = () => {
@@ -272,6 +291,7 @@ function App() {
     drawTriangleFlag = false;
     drawCircleFlag = false;
     drawDashedLineFlag = false;
+    drawFreeHandFlag = false;
   }
 
   //draw dashed line
@@ -282,6 +302,18 @@ function App() {
     drawRectFlag = false;
     drawTriangleFlag = false;
     drawCircleFlag = false;
+    drawFreeHandFlag = false;
+  }
+  
+  //draw free hand
+  const toggleDrawFreeHand = () => {
+    //logics
+    drawFreeHandFlag = true;
+    drawStraightLineFlag = false;
+    drawRectFlag = false;
+    drawTriangleFlag = false;
+    drawCircleFlag = false;
+    drawDashedLineFlag = false;
   }
 
   return (
@@ -299,6 +331,7 @@ function App() {
             <button className='btn btn-warning' onClick={toggleCircle}>Circle</button>
             <button className='btn btn-info' onClick={toggleStraightLine}>Straight Line</button>
             <button className='btn btn-info' onClick={toggleDashedLineFlag}>Dashed Line</button>
+            <button className='btn btn-secondary' onClick={toggleDrawFreeHand}>Free Hand Drawing</button>
           </div>
         </div>
       </div>
