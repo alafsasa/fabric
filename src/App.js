@@ -9,7 +9,7 @@ var drawTriangleFlag = false;
 var drawCircleFlag = false;
 var drawStraightLineFlag = false;
 var drawDashedLineFlag = false;
-var drawFreeHandFlag = false;
+//var drawFreeHandFlag = false;
 
 function App() {
   const [paper, setPaper] = useState(null);
@@ -120,16 +120,16 @@ function App() {
           canvas.add(line);
         }
         //free hand drawing
-        if(drawFreeHandFlag){
-          //logic
-          console.log('active')
-          canvas.isDrawingMode = true;
-          //set properties
-          canvas.freeDrawingBrush.width = 8;
-          canvas.freeDrawingBrush.color = 'red';
-        }else{
-          canvas.isDrawingMode = false;
-        }
+        //if(drawFreeHandFlag){
+        //  //logic
+        //  console.log('active')
+        //  canvas.isDrawingMode = true;
+        //  //set properties
+        //  canvas.freeDrawingBrush.width = 8;
+        //  canvas.freeDrawingBrush.color = 'red';
+        //}else{
+        //  canvas.isDrawingMode = false;
+        //}
       }
     });
     //mousemove
@@ -231,12 +231,10 @@ function App() {
     //mouse up
     canvas.on('mouse:up', (o)=>{
       isDown = false;
-      //canvas.isDrawingMode = false;
     });
 
     //some stuff
     console.log('render');
-
     //clear canvas
     return () => {
       if(canvas){
@@ -248,6 +246,9 @@ function App() {
 
   //handlers
   //use paper
+  if(paper !== null){
+    paper.isDrawingMode = false;
+  }
   function isSelected(){
     //logic
     //if selected on this handler is clicked
@@ -256,7 +257,7 @@ function App() {
     drawTriangleFlag = false;
     drawCircleFlag = false;
     //log active object or objects
-    console.log(paper.getActiveObject())
+    paper.isDrawingMode = false;
   }
   //delete objects
   const deleteObj = () => {
@@ -281,7 +282,8 @@ function App() {
     drawCircleFlag = false;
     drawStraightLineFlag = false;
     drawDashedLineFlag = false;
-    drawFreeHandFlag = false;
+    //drawFreeHandFlag = false;
+    paper.isDrawingMode = false;
   }
   //unit test
   function testMe(){
@@ -298,7 +300,8 @@ function App() {
     drawCircleFlag = false;
     drawStraightLineFlag = false;
     drawDashedLineFlag = false;
-    drawFreeHandFlag = false;
+    //drawFreeHandFlag = false;
+    paper.isDrawingMode = false;
   }
   const toggleCircle = () => {
     //logic
@@ -307,7 +310,8 @@ function App() {
     drawTriangleFlag = false;
     drawStraightLineFlag = false;
     drawDashedLineFlag = false;
-    drawFreeHandFlag = false;
+    //drawFreeHandFlag = false;
+    paper.isDrawingMode = false;
   }
   //straight line
   const toggleStraightLine = () => {
@@ -317,7 +321,8 @@ function App() {
     drawTriangleFlag = false;
     drawCircleFlag = false;
     drawDashedLineFlag = false;
-    drawFreeHandFlag = false;
+    //drawFreeHandFlag = false;
+    paper.isDrawingMode = false;
   }
 
   //draw dashed line
@@ -328,13 +333,19 @@ function App() {
     drawRectFlag = false;
     drawTriangleFlag = false;
     drawCircleFlag = false;
-    drawFreeHandFlag = false;
+    //drawFreeHandFlag = false;
+    paper.isDrawingMode = false;
   }
   
   //draw free hand
   const toggleDrawFreeHand = () => {
     //logics
-    drawFreeHandFlag = true;
+    paper.isDrawingMode = true;
+    //add pencil properties
+    paper.freeDrawingBrush.width = 8;
+    paper.freeDrawingBrush.color = '#f4a946'
+
+    //drawFreeHandFlag = true;
     drawStraightLineFlag = false;
     drawRectFlag = false;
     drawTriangleFlag = false;
