@@ -13,7 +13,7 @@ var drawDashedLineFlag = false;
 
 function App() {
   const [paper, setPaper] = useState(null);
-  const [imagepreview, setImagePreview] = useState('');
+  //const [imagepreview, setImagePreview] = useState('');
   const kanvas = useRef();
 
   //get canvas
@@ -374,17 +374,12 @@ function App() {
     //logics
   }
 
-  //save canvas to image - jpeg or png
-  const saveCanvasToImage = () => {
-    //logics
-  }
-
   //handle image
   const handleImage = (e) => {
     //logics
     console.log(e.target.files[0]);
     console.log(URL.createObjectURL(e.target.files[0]));
-    setImagePreview(URL.createObjectURL(e.target.files[0]))
+    //setImagePreview(URL.createObjectURL(e.target.files[0]))
     //add this image to the canvas
     //const snap = new fabric.Image()
     const output = new Image();
@@ -392,10 +387,10 @@ function App() {
     //console.log(output)
     output.onload = () => {
       const snap = new fabric.Image(output, {
-        height: 800,
-        width: 800,
         left: 0,
-        top: 0
+        top: 0,
+        scaleX: .25,
+        scaleY: .25
       });
       paper.add(snap);
     }
@@ -403,10 +398,28 @@ function App() {
     URL.revokeObjectURL(output.src);
   }
 
+    //save canvas to image - jpeg or png
+    const saveCanvasToImage = () => {
+      //logics
+      //full quality
+      const dataURL = paper.toDataURL("image/jpeg", 0.5);
+      //medium quality
+      //const mediumQuality = paper.toDataURL('image/jpeg', 0.5);
+      //low quality
+      //const lowQuality = paper.toDataURL('image/jpeg', 0.1);
+      console.log(dataURL);
+      //save dataurl to file
+      const a = document.createElement('a');
+      a.href = dataURL;
+      a.download = 'lueminour.jpeg';
+      a.click()
+    }
+
   return (
     <div className="container">
       <div className='row'>
         <div className='col-sm-12'>
+          <div className='display-4'>Lueminour</div>
           <div className='display-3'>FabricJs Meme Creator</div>
           <canvas ref={kanvas} width={500} height={500}></canvas>
           <div className='mt-3'>
