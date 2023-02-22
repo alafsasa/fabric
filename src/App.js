@@ -353,6 +353,21 @@ function App() {
     drawDashedLineFlag = false;
   }
 
+  //add Text
+  const toggleAddText = () => {
+    //logics
+    const text = new fabric.IText('Tap & Type', {
+      left: 50,
+      top: 100,
+      fontFamily: 'sans-serif',
+      fill: 'black',
+      fontSize: 24
+    });
+    paper.add(text)
+
+    //disable all other
+  }
+
   return (
     <div className="container">
       <div className='row'>
@@ -369,6 +384,9 @@ function App() {
             <button className='btn btn-info' onClick={toggleStraightLine}>Straight Line</button>
             <button className='btn btn-info' onClick={toggleDashedLineFlag}>Dashed Line</button>
             <button className='btn btn-secondary' onClick={toggleDrawFreeHand}>Free Hand Drawing</button>
+            <button className='btn btn-secondary' onClick={toggleAddText}>Add Text</button>
+            <button className='btn btn-info'>Add Image</button>
+            <button className='btn btn-success'>Save</button>
           </div>
         </div>
       </div>
