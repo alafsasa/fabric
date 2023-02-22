@@ -13,6 +13,7 @@ var drawDashedLineFlag = false;
 
 function App() {
   const [paper, setPaper] = useState(null);
+  const [imagepreview, setImagePreview] = useState('');
   const kanvas = useRef();
 
   //get canvas
@@ -368,6 +369,40 @@ function App() {
     //disable all other
   }
 
+  //add image
+  const toggleAddImage = () => {
+    //logics
+  }
+
+  //save canvas to image - jpeg or png
+  const saveCanvasToImage = () => {
+    //logics
+  }
+
+  //handle image
+  const handleImage = (e) => {
+    //logics
+    console.log(e.target.files[0]);
+    console.log(URL.createObjectURL(e.target.files[0]));
+    setImagePreview(URL.createObjectURL(e.target.files[0]))
+    //add this image to the canvas
+    //const snap = new fabric.Image()
+    const output = new Image();
+    output.src = URL.createObjectURL(e.target.files[0])
+    //console.log(output)
+    output.onload = () => {
+      const snap = new fabric.Image(output, {
+        height: 800,
+        width: 800,
+        left: 0,
+        top: 0
+      });
+      paper.add(snap);
+    }
+    //free memory
+    URL.revokeObjectURL(output.src);
+  }
+
   return (
     <div className="container">
       <div className='row'>
@@ -385,8 +420,13 @@ function App() {
             <button className='btn btn-info' onClick={toggleDashedLineFlag}>Dashed Line</button>
             <button className='btn btn-secondary' onClick={toggleDrawFreeHand}>Free Hand Drawing</button>
             <button className='btn btn-secondary' onClick={toggleAddText}>Add Text</button>
-            <button className='btn btn-info'>Add Image</button>
-            <button className='btn btn-success'>Save</button>
+            <button className='btn btn-info' onClick={toggleAddImage}>Add Image</button>
+            <button className='btn btn-success' onClick={saveCanvasToImage}>Save</button>
+          </div>
+          <div>
+            <div>
+              <input type='file' accept='image/*' onChange={handleImage} className='form-control'/>
+            </div>
           </div>
         </div>
       </div>
