@@ -22,7 +22,7 @@ function App() {
   }
   //logic
   useEffect(()=>{
-    var canvas = new fabric.Canvas(kanvas.current, {backgroundColor: '#ddd'});
+    var canvas = new fabric.Canvas(kanvas.current, {backgroundColor: '#ddd', isDrawingMode: false});
     //make canvas publicly available
     exposeCanvas(canvas);
     //draw shapes
@@ -119,6 +119,17 @@ function App() {
           });
           canvas.add(line);
         }
+        //free hand drawing
+        if(drawFreeHandFlag){
+          //logic
+          console.log('active')
+          canvas.isDrawingMode = true;
+          //set properties
+          canvas.freeDrawingBrush.width = 8;
+          canvas.freeDrawingBrush.color = 'red';
+        }else{
+          canvas.isDrawingMode = false;
+        }
       }
     });
     //mousemove
@@ -201,22 +212,26 @@ function App() {
           line.set({x2: pointer.x, y2: pointer.y});
         }
         //free hand drawing
-        if(drawFreeHandFlag){
-          //logics
-          canvas.isDrawingMode = true;
-            canvas.freeDrawingBrush.width = 5;
-            canvas.freeDrawingBrush.color = "#1034a6";
-            canvas.on('path:created', (e) =>{
-              e.path.set();
-          });
-          //
-        }
+        //if(drawFreeHandFlag){
+        //  //logics
+        //  console.log('moving')
+        //  canvas.isDrawingMode = true;
+        //  canvas.freeDrawingBrush.width = 5;
+        //  canvas.freeDrawingBrush.color = "#1034a6";
+        //  canvas.on('path:created', (e) =>{
+        //    e.path.set();
+        //  });
+        //  //
+        //}else{
+        //  canvas.isDrawingMode = false;
+        //}
       }
       canvas.renderAll();
     });
     //mouse up
     canvas.on('mouse:up', (o)=>{
       isDown = false;
+      //canvas.isDrawingMode = false;
     });
 
     //some stuff
@@ -245,7 +260,18 @@ function App() {
   }
   //delete objects
   const deleteObj = () => {
-    paper.remove(paper.getActiveObject());
+    //paper.remove(paper.getActiveObject());
+    //var activeObject = paper.getActiveObject();
+    var activeGroupObjects = paper.getActiveObjects();
+    //console.log(activeGroupObjects.length);
+    activeGroupObjects.forEach((obj)=>{
+      paper.remove(obj);
+    });
+    //if(activeObject){
+    //  console.log('single object');
+    //}else if(activeGroupObjects){
+    //  console.log('multiple objects');
+    //}
   }
   //triangle
   const toggleTriangleFlag = () => {
@@ -323,7 +349,7 @@ function App() {
           <div className='display-3'>FabricJs Meme Creator</div>
           <canvas ref={kanvas} width={500} height={500}></canvas>
           <div className='mt-3'>
-            <button className='btn btn-info' onClick={isSelected}>is Selected</button>
+            <button className='btn btn-info' onClick={isSelected}>Select Objects</button>
             <button className='btn btn-danger' onClick={deleteObj}>Delete</button>
             <button className='btn btn-success' onClick={toggleTriangleFlag}>Triangle</button>
             <button className='btn btn-warning' onClick={testMe}>Test</button>
