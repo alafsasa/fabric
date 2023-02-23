@@ -15,7 +15,8 @@ var drawDashedLineFlag = false;
 
 function App() {
   const [paper, setPaper] = useState(null);
-  const [color, setColor] = useColor("hex", "#1034a6")
+  const [color, setColor] = useColor("hex", "#1034a6");
+  const [spinNumber, setSpinNumber] = useState(0);
   //const [imagepreview, setImagePreview] = useState('');
   const kanvas = useRef();
 
@@ -419,6 +420,7 @@ function App() {
     }
 
     //MANIPULATE OBJECTS ON CANVAS
+    //change background/fill color
     const changeObjFill = () => {
       //logics
       //console.log(paper.getActiveObject().fill);
@@ -429,7 +431,32 @@ function App() {
       paper.renderAll();
       //console.log(color.hex);
     }
-
+    //change stroke color
+    const changeObjStroke = () => {
+      //logics
+      if(paper.getActiveObject() === null || paper.getActiveObject() === undefined){
+        return;
+      }
+      paper.getActiveObject().set({stroke: color.hex});
+      paper.renderAll();
+    }
+    //change stroke width
+    const changeStrokeWidth = () => {
+      //logics
+      if(paper.getActiveObject() === null || paper.getActiveObject() === undefined){
+        return;
+      }
+      console.log(spinNumber)
+      paper.getActiveObject().set({strokeWidth: spinNumber});
+      paper.renderAll();
+    }
+    //spin number
+    const minusSpinNumber = () => {
+      //logics
+      if(spinNumber !== 0){
+        setSpinNumber(spinNumber - 1);
+      }
+    }
   return (
     <div className="container">
       <div className='row'>
@@ -462,11 +489,21 @@ function App() {
               <div>
               </div>
               <div>
-                <ColorPicker width={456} height={228} color={color} onChange={setColor} hideHSV dark />
+                <ColorPicker width={400} height={100} color={color} onChange={setColor} hideHSV hideRGB dark />
               </div>
-              <p onClick={changeObjFill}>fill</p>
-              <p>stroke</p>
-              <p>strokeWidth</p>
+              <div className='m-3'>
+                <p onClick={changeObjFill}>fill <span style={{padding: '4px 32px', backgroundColor: color.hex}}></span></p>
+                <p onClick={changeObjStroke}>stroke <span style={{padding: '4px 32px', backgroundColor: color.hex}}></span></p>
+                <div>
+                  <button className='btn btn-info' onClick={minusSpinNumber}>-</button>
+                  <button className='btn btn-secondary'>{spinNumber}</button>
+                  <button className='btn btn-info' onClick={()=>{setSpinNumber(spinNumber + 1)}}>+</button>
+                </div>
+                <p onClick={changeStrokeWidth}>strokeWidth</p>
+              </div>
+              <div>
+                <p>Text Formatting</p>
+              </div>
             </div>
           </div>
         </div>
