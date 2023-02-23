@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import './App.css';
 import { fabric } from 'fabric';
+import { ColorPicker, useColor } from 'react-color-palette';
+import 'react-color-palette/lib/css/styles.css';
 
 //global
 var isSelectedFlag = false;
@@ -13,6 +15,7 @@ var drawDashedLineFlag = false;
 
 function App() {
   const [paper, setPaper] = useState(null);
+  const [color, setColor] = useColor("hex", "#1034a6")
   //const [imagepreview, setImagePreview] = useState('');
   const kanvas = useRef();
 
@@ -56,8 +59,8 @@ function App() {
             top: originY,
             width: pointer.x-originX,
             height: pointer.y-originY,
-            fill: '',
-            stroke: 'red',
+            fill: 'red',
+            stroke: '',
             strokeWidth: 5
           });
           canvas.add(rect);
@@ -415,6 +418,18 @@ function App() {
       a.click()
     }
 
+    //MANIPULATE OBJECTS ON CANVAS
+    const changeObjFill = () => {
+      //logics
+      //console.log(paper.getActiveObject().fill);
+      if(paper.getActiveObject() === null || paper.getActiveObject() === undefined){
+        return;
+      }
+      paper.getActiveObject().set({fill: color.hex});
+      paper.renderAll();
+      //console.log(color.hex);
+    }
+
   return (
     <div className="container">
       <div className='row'>
@@ -439,6 +454,19 @@ function App() {
           <div>
             <div>
               <input type='file' accept='image/*' onChange={handleImage} className='form-control'/>
+            </div>
+          </div>
+          <div> 
+            <h4>Properties</h4>
+            <div>
+              <div>
+              </div>
+              <div>
+                <ColorPicker width={456} height={228} color={color} onChange={setColor} hideHSV dark />
+              </div>
+              <p onClick={changeObjFill}>fill</p>
+              <p>stroke</p>
+              <p>strokeWidth</p>
             </div>
           </div>
         </div>
