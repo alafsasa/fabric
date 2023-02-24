@@ -19,6 +19,8 @@ function App() {
   const [spinNumber, setSpinNumber] = useState(0);
   const [selectedFont, setSelectedFont] = useState('sans-serif');
   const [selectedTextAlign, setSelectedTextAlign] = useState('left');
+  const [selectedFontWeight, setSelectedFontWeight] = useState('normal');
+  const [selectedFontSize, setSelectedFontSize] = useState(6);
   //const [imagepreview, setImagePreview] = useState('');
   const kanvas = useRef();
 
@@ -482,6 +484,27 @@ function App() {
       paper.getActiveObject().set({textAlign: e.target.value.toLowerCase()});
       paper.renderAll();
     }
+    //font weight
+    const handleFontWeight = (e) => {
+      //logic
+      setSelectedFontWeight(e.target.value);
+      if(paper.getActiveObject() === null || paper.getActiveObject() === undefined){
+        return;
+      }
+      paper.getActiveObject().set({fontWeight: e.target.value.toLowerCase()});
+      paper.renderAll();
+    }
+    //font size
+    const handleFontSize = (e) => {
+      //logic
+      setSelectedFontSize(e.target.value)
+      //console.log(e.target.value);
+      if(paper.getActiveObject() === null || paper.getActiveObject() === undefined){
+        return;
+      }
+      paper.getActiveObject().set({fontSize: e.target.value});
+      paper.renderAll();
+    }
   return (
     <div className="container">
       <div className='row'>
@@ -544,15 +567,15 @@ function App() {
                   <option>Justify</option>
                 </select>
                 <br/>
-                <select className='form-select'>
+                <select className='form-select' onChange={handleFontWeight} value={selectedFontWeight}>
                   <option>Normal</option>
                   <option>Bold</option>
                 </select>
                 <br/>
                 <span>FontSize</span>
-                <input type="number" min={0} className='form-control'/>
+                <input type="number" min={6} className='form-control' value={selectedFontSize} onChange={handleFontSize}/>
                 <span>StrokeColor</span>
-                <input type="text" className='form-control'/>
+                <input type="text" className='form-control' placeholder='#ffffff'/>
                 <span>StrokeWidth</span>
                 <input type="number" min={0} className="form-control"/>
                 <span>LineHeight</span>
