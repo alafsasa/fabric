@@ -17,6 +17,8 @@ function App() {
   const [paper, setPaper] = useState(null);
   const [color, setColor] = useColor("hex", "#1034a6");
   const [spinNumber, setSpinNumber] = useState(0);
+  const [selectedFont, setSelectedFont] = useState('sans-serif');
+  const [selectedTextAlign, setSelectedTextAlign] = useState('left');
   //const [imagepreview, setImagePreview] = useState('');
   const kanvas = useRef();
 
@@ -457,6 +459,29 @@ function App() {
         setSpinNumber(spinNumber - 1);
       }
     }
+    //TEXT FORMATTING
+    //change font
+    const handleSelectFont = (e) => {
+      //logic
+      setSelectedFont(e.target.value)
+      //console.log(e.target.value.toLowerCase());
+      //console.log(paper.getActiveObject());
+      if(paper.getActiveObject() === null || paper.getActiveObject() === undefined){
+        return;
+      }
+      paper.getActiveObject().set({fontFamily: e.target.value.toLowerCase()});
+      paper.renderAll();
+    }
+    //align text
+    const handleTextAlign = (e) => {
+      //logic
+      setSelectedTextAlign(e.target.value);
+      if(paper.getActiveObject() === null || paper.getActiveObject() === undefined){
+        return;
+      }
+      paper.getActiveObject().set({textAlign: e.target.value.toLowerCase()});
+      paper.renderAll();
+    }
   return (
     <div className="container">
       <div className='row'>
@@ -503,16 +528,16 @@ function App() {
               </div>
               <div>
                 <p>Text Formatting</p>
-                <select className='form-select'>
+                <select className='form-select' onChange={handleSelectFont} value={selectedFont}>
                   <option>Arial</option>
                   <option>Courier</option>
                   <option>Helvetica</option>
-                  <option>Sans Serif </option>
+                  <option>Sans-Serif </option>
                   <option>Monospace</option>
                   <option>Verdana</option>
                 </select>
                 <br/>
-                <select className='form-select'>
+                <select className='form-select' onChange={handleTextAlign} value={selectedTextAlign}>
                   <option>Left</option>
                   <option>Center</option>
                   <option>Right</option>
