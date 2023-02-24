@@ -21,6 +21,10 @@ function App() {
   const [selectedTextAlign, setSelectedTextAlign] = useState('left');
   const [selectedFontWeight, setSelectedFontWeight] = useState('normal');
   const [selectedFontSize, setSelectedFontSize] = useState(6);
+  const [selectedLineHeight, setSelectedLineHeight] = useState(1)
+  const [checkItalic, setCheckItalic] = useState(false);
+  const [checkLineThrough, setCheckLineThrough] = useState(false);
+  const [checkUnderline, setCheckUnderline] = useState(false);
   //const [imagepreview, setImagePreview] = useState('');
   const kanvas = useRef();
 
@@ -505,6 +509,75 @@ function App() {
       paper.getActiveObject().set({fontSize: e.target.value});
       paper.renderAll();
     }
+    //font color
+    const handleFontColor = () => {
+      //logic
+      if(paper.getActiveObject() === null || paper.getActiveObject() === undefined){
+        return;
+      }
+      paper.getActiveObject().set({fill: color.hex});
+      paper.renderAll();
+    }
+    //line height
+    const handleLineHeight = (e) => {
+      //logic
+      setSelectedLineHeight(e.target.value);
+      if(paper.getActiveObject() === null || paper.getActiveObject() === undefined){
+        return;
+      }
+      paper.getActiveObject().set({lineHeight: e.target.value});
+      paper.renderAll();
+    }
+    //italic text
+    const handleItalicText = (e) => {
+      //logic      
+      //console.log(e.target.checked);
+      if(paper.getActiveObject() === null || paper.getActiveObject() === undefined){
+        return;
+      }
+      if(checkItalic === false){
+        setCheckItalic(true);
+        paper.getActiveObject().set({fontStyle: 'italic'});
+        paper.renderAll();
+      }else{
+        setCheckItalic(false);
+        paper.getActiveObject().set({fontStyle: 'normal'});
+        paper.renderAll();
+      }
+      console.log(e.target.checked);
+    }
+    //line/strike through
+    const handleLineThrough = () => {
+      //logic
+      if(paper.getActiveObject() === null || paper.getActiveObject() === undefined){
+        return;
+      }
+      if(checkLineThrough ===false){
+        setCheckLineThrough(true);
+        paper.getActiveObject().set({linethrough: true});
+        paper.renderAll();
+      }else{
+        setCheckLineThrough(false);
+        paper.getActiveObject().set({linethrough: false});
+        paper.renderAll();
+      }
+    }
+    //underline
+    const handleUnderline = (e) => {
+      //logic
+      if(paper.getActiveObject() === null || paper.getActiveObject() === undefined){
+        return;
+      }
+      if(checkUnderline ===false){
+        setCheckUnderline(true);
+        paper.getActiveObject().set({underline: true});
+        paper.renderAll();
+      }else{
+        setCheckUnderline(false);
+        paper.getActiveObject().set({underline: false});
+        paper.renderAll();
+      }
+    }
   return (
     <div className="container">
       <div className='row'>
@@ -574,27 +647,21 @@ function App() {
                 <br/>
                 <span>FontSize</span>
                 <input type="number" min={6} className='form-control' value={selectedFontSize} onChange={handleFontSize}/>
-                <span>StrokeColor</span>
-                <input type="text" className='form-control' placeholder='#ffffff'/>
-                <span>StrokeWidth</span>
-                <input type="number" min={0} className="form-control"/>
+                <span onClick={handleFontColor}>FontColor<span style={{padding: '4px 32px', backgroundColor: color.hex}}></span></span>
+                <br/>
                 <span>LineHeight</span>
-                <input type="number" min={0} className='form-control'/>
+                <input type="number" min={1} className='form-control' value={selectedLineHeight} onChange={handleLineHeight}/>
                 <br/>
                 <div className='form-check'>
-                  <input type='checkbox' className='form-check-input' id='check1'/>
+                  <input type='checkbox' className='form-check-input' id='check1' onChange={handleItalicText} checked={checkItalic}/>
                   <label className='form-check-label' htmlFor='check1'><i>Italic</i></label>
                 </div>
                 <div className='form-check'>
-                  <input type='checkbox' className='form-check-input' id='check2'/>
-                  <label className='form-check-label' htmlFor='check2'>Overline</label>
-                </div>
-                <div className='form-check'>
-                  <input type='checkbox' className='form-check-input' id='check3'/>
+                  <input type='checkbox' className='form-check-input' id='check3' onChange={handleLineThrough} checked={checkLineThrough}/>
                   <label className='form-check-label' htmlFor='check3'>Line Through</label>
                 </div>
                 <div className='form-check'>
-                  <input type='checkbox' className='form-check-input' id='check4'/>
+                  <input type='checkbox' className='form-check-input' id='check4' onChange={handleUnderline} checked={checkUnderline}/>
                   <label className='form-check-label' htmlFor='check4'>Underline</label>
                 </div>
               </div>
