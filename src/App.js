@@ -503,6 +503,52 @@ function App() {
               </div>
               <div>
                 <p>Text Formatting</p>
+                <select className='form-select'>
+                  <option>Arial</option>
+                  <option>Courier</option>
+                  <option>Helvetica</option>
+                  <option>Sans Serif </option>
+                  <option>Monospace</option>
+                  <option>Verdana</option>
+                </select>
+                <br/>
+                <select className='form-select'>
+                  <option>Left</option>
+                  <option>Center</option>
+                  <option>Right</option>
+                  <option>Justify</option>
+                </select>
+                <br/>
+                <select className='form-select'>
+                  <option>Normal</option>
+                  <option>Bold</option>
+                </select>
+                <br/>
+                <span>FontSize</span>
+                <input type="number" min={0} className='form-control'/>
+                <span>StrokeColor</span>
+                <input type="text" className='form-control'/>
+                <span>StrokeWidth</span>
+                <input type="number" min={0} className="form-control"/>
+                <span>LineHeight</span>
+                <input type="number" min={0} className='form-control'/>
+                <br/>
+                <div className='form-check'>
+                  <input type='checkbox' className='form-check-input' id='check1'/>
+                  <label className='form-check-label' htmlFor='check1'><i>Italic</i></label>
+                </div>
+                <div className='form-check'>
+                  <input type='checkbox' className='form-check-input' id='check2'/>
+                  <label className='form-check-label' htmlFor='check2'>Overline</label>
+                </div>
+                <div className='form-check'>
+                  <input type='checkbox' className='form-check-input' id='check3'/>
+                  <label className='form-check-label' htmlFor='check3'>Line Through</label>
+                </div>
+                <div className='form-check'>
+                  <input type='checkbox' className='form-check-input' id='check4'/>
+                  <label className='form-check-label' htmlFor='check4'>Underline</label>
+                </div>
               </div>
             </div>
           </div>
