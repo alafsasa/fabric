@@ -11,6 +11,7 @@ var drawTriangleFlag = false;
 var drawCircleFlag = false;
 var drawStraightLineFlag = false;
 var drawDashedLineFlag = false;
+var cropImageFlag = false;
 //var drawFreeHandFlag = false;
 
 function App() {
@@ -42,6 +43,16 @@ function App() {
     //use canvas
     var isDown = false;
     var originX, originY, rect, ellipse, triangle, line = null;
+    var mouseDn;
+    //draw a crop rectangle
+    var rectangle = new fabric.Rect({
+      fill: 'transparent',
+      stroke: '#ccc',
+      strokeDashArray: [2, 2],
+      visible: false
+    });
+    //add crop rectangle to the canvas
+    canvas.add(rectangle);
     //mousedown
     canvas.on('mouse:down', (o)=>{
       isDown = true;
@@ -143,6 +154,17 @@ function App() {
         //}else{
         //  canvas.isDrawingMode = false;
         //}
+        //crop drag rectangle
+        if(cropImageFlag){
+          console.log('part of the deal');
+          rectangle.width = 2;
+          rectangle.height = 2;
+          rectangle.left = originX;
+          rectangle.top = originY;
+          rectangle.visible = true;
+          mouseDn = o.e;
+          canvas.bringToFront(rectangle);
+        }
       }
     });
     //mousemove
@@ -238,12 +260,18 @@ function App() {
         //}else{
         //  canvas.isDrawingMode = false;
         //}
+        //draw crop rectangle area
+        if(cropImageFlag){
+          rectangle.width = originX - mouseDn.pageX;
+          rectangle.height = originY - mouseDn.pageY;
+        }
       }
       canvas.renderAll();
     });
     //mouse up
     canvas.on('mouse:up', (o)=>{
       isDown = false;
+      mouseDn = null;
     });
 
     //some stuff
@@ -271,6 +299,7 @@ function App() {
     drawCircleFlag = false;
     //log active object or objects
     paper.isDrawingMode = false;
+    cropImageFlag = false;
   }
   //delete objects
   const deleteObj = () => {
@@ -297,6 +326,7 @@ function App() {
     drawDashedLineFlag = false;
     //drawFreeHandFlag = false;
     paper.isDrawingMode = false;
+    cropImageFlag = false;
   }
   //unit test
   function testMe(){
@@ -315,6 +345,7 @@ function App() {
     drawDashedLineFlag = false;
     //drawFreeHandFlag = false;
     paper.isDrawingMode = false;
+    cropImageFlag = false;
   }
   const toggleCircle = () => {
     //logic
@@ -325,6 +356,7 @@ function App() {
     drawDashedLineFlag = false;
     //drawFreeHandFlag = false;
     paper.isDrawingMode = false;
+    cropImageFlag = false;
   }
   //straight line
   const toggleStraightLine = () => {
@@ -336,6 +368,7 @@ function App() {
     drawDashedLineFlag = false;
     //drawFreeHandFlag = false;
     paper.isDrawingMode = false;
+    cropImageFlag = false;
   }
 
   //draw dashed line
@@ -348,6 +381,7 @@ function App() {
     drawCircleFlag = false;
     //drawFreeHandFlag = false;
     paper.isDrawingMode = false;
+    cropImageFlag = false;
   }
   
   //draw free hand
@@ -364,6 +398,7 @@ function App() {
     drawTriangleFlag = false;
     drawCircleFlag = false;
     drawDashedLineFlag = false;
+    cropImageFlag = false;
   }
 
   //add Text
@@ -578,6 +613,18 @@ function App() {
         paper.renderAll();
       }
     }
+    //CROP IMAGE IMPLEMENTATION
+    const handleCropImage = () => {
+      //logics
+      cropImageFlag = true;
+      drawStraightLineFlag = false;
+      drawRectFlag = false;
+      drawTriangleFlag = false;
+      drawCircleFlag = false;
+      drawDashedLineFlag = false;
+      paper.isDrawingMode = false;
+      console.log('cropping image');
+    }
   return (
     <div className="container">
       <div className='row'>
@@ -597,6 +644,7 @@ function App() {
             <button className='btn btn-secondary' onClick={toggleDrawFreeHand}>Free Hand Drawing</button>
             <button className='btn btn-secondary' onClick={toggleAddText}>Add Text</button>
             <button className='btn btn-info' onClick={toggleAddImage}>Add Image</button>
+            <button className='btn btn-warning' onClick={handleCropImage}>Crop Image</button>
             <button className='btn btn-success' onClick={saveCanvasToImage}>Save</button>
           </div>
           <div>
