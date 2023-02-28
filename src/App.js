@@ -42,17 +42,9 @@ function App() {
     //draw shapes
     //use canvas
     var isDown = false;
-    var originX, originY, rect, ellipse, triangle, line = null;
-    var mouseDn;
-    //draw a crop rectangle
-    var rectangle = new fabric.Rect({
-      fill: 'transparent',
-      stroke: '#ccc',
-      strokeDashArray: [2, 2],
-      visible: false
-    });
-    //add crop rectangle to the canvas
-    canvas.add(rectangle);
+    var originX, originY, rect, ellipse, triangle, line, rectangleCrop = null;
+    var crop = false;
+
     //mousedown
     canvas.on('mouse:down', (o)=>{
       isDown = true;
@@ -154,18 +146,22 @@ function App() {
         //}else{
         //  canvas.isDrawingMode = false;
         //}
-      }else{
         //crop drag rectangle
         if(cropImageFlag){
           console.log('part of the deal');
-          console.log(canvas.getActiveObject().selectable = false);
-          rectangle.width = 2;
-          rectangle.height = 2;
-          rectangle.left = originX;
-          rectangle.top = originY;
-          rectangle.visible = true;
-          mouseDn = o.e;
-          canvas.bringToFront(rectangle);
+          crop = true;
+          rectangleCrop = new fabric.Rect({
+            left: originX,
+            top: originY,
+            width: pointer.x - originX,
+            height: pointer.y - originY,
+            fill: 'transparent',
+            opacity: 1,
+            stroke: '#1034a6',
+            strokeDashArray: [2, 2],
+          });
+          canvas.add(rectangleCrop);
+          canvas.bringToFront(rectangleCrop);
         }
       }
     });
@@ -263,9 +259,15 @@ function App() {
         //  canvas.isDrawingMode = false;
         //}
         //draw crop rectangle area
-        if(cropImageFlag){
-          rectangle.width = originX - mouseDn.pageX;
-          rectangle.height = originY - mouseDn.pageY;
+        if(crop && cropImageFlag){
+          if(originX > pointer.y){
+            rectangleCrop.set({left: Math.abs(pointer.x)});
+          }
+          if(originY > pointer.y){
+            rectangleCrop.set({top: Math.abs(pointer.y)});
+          }
+          rectangleCrop.set({width: Math.abs(originX - pointer.x)});
+          rectangleCrop.set({height: Math.abs(originY - pointer.y)});
         }
       }
       canvas.renderAll();
@@ -273,7 +275,7 @@ function App() {
     //mouse up
     canvas.on('mouse:up', (o)=>{
       isDown = false;
-      mouseDn = null;
+      crop = false;
     });
 
     //some stuff
