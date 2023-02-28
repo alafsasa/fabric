@@ -154,9 +154,11 @@ function App() {
         //}else{
         //  canvas.isDrawingMode = false;
         //}
+      }else{
         //crop drag rectangle
         if(cropImageFlag){
           console.log('part of the deal');
+          console.log(canvas.getActiveObject().selectable = false);
           rectangle.width = 2;
           rectangle.height = 2;
           rectangle.left = originX;
