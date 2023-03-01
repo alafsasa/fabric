@@ -13,6 +13,7 @@ var drawStraightLineFlag = false;
 var drawDashedLineFlag = false;
 var cropImageFlag = false;
 //var drawFreeHandFlag = false;
+var imageObj;
 
 function App() {
   const [paper, setPaper] = useState(null);
@@ -158,26 +159,33 @@ function App() {
         //  canvas.isDrawingMode = false;
         //}
         //crop drag rectangle
-        if(cropImageFlag){
-          console.log('part of the deal');
-          crop = true;
-          //rectangleCrop = new fabric.Rect({
-          //  left: originX,
-          //  top: originY,
-          //  width: pointer.x - originX,
-          //  height: pointer.y - originY,
-          //  fill: 'transparent',
-          //  opacity: 1,
-          //  stroke: '#1034a6',
-          //  strokeDashArray: [2, 2],
-          //});
-          //canvas.add(rectangleCrop);
-          //canvas.bringToFront(rectangleCrop);
-          rectangle.left = originX;
-          rectangle.top = originY;
-          rectangle.visible = true;
-          canvas.bringToFront(rectangle);
-        }
+        //if(cropImageFlag){
+        //  console.log('part of the deal');
+        //  crop = true;
+        //  //rectangleCrop = new fabric.Rect({
+        //  //  left: originX,
+        //  //  top: originY,
+        //  //  width: pointer.x - originX,
+        //  //  height: pointer.y - originY,
+        //  //  fill: 'transparent',
+        //  //  opacity: 1,
+        //  //  stroke: '#1034a6',
+        //  //  strokeDashArray: [2, 2],
+        //  //});
+        //  //canvas.add(rectangleCrop);
+        //  //canvas.bringToFront(rectangleCrop);
+        //  rectangle.left = originX;
+        //  rectangle.top = originY;
+        //  rectangle.visible = true;
+        //  canvas.bringToFront(rectangle);
+        //}
+      }
+      if(cropImageFlag){
+        crop = true;
+        rectangle.left = originX;
+        rectangle.top = originY;
+        rectangle.visible = true;
+        canvas.bringToFront(rectangle);
       }
     });
     //mousemove
@@ -299,6 +307,31 @@ function App() {
     canvas.on('mouse:up', (o)=>{
       isDown = false;
       crop = false;
+      //crop the obj
+      //var left = rectangle.left - objLeft;
+      //var top = rectangle.top - objTop;
+      //left *= 1 / 0.25;
+      //top *= 1 / 0.25;
+//
+      //var width = rectangle.width * 1 / 0.25;
+      //var height = rectangle.height * 1 / 0.25;
+//
+      //imageObj.clipTo = (ctx) => { ctx.rect(left, top, width, height) };
+      //imageObj.selectable = true;
+      //rectangle.visible = false;
+      //canvas.renderAll();
+      if(imageObj !== undefined){
+        //console.log(imageObj.left);
+        var left = rectangle.left - imageObj.left;
+        var top = rectangle.top - imageObj.top;
+        left *= 1 / 0.25;
+        top *= 1 / 0.25;
+        var width = rectangle.width * 1 / 0.25;
+        var height = rectangle.height * 1 / 0.25;
+        imageObj.clipTo = (ctx) => {ctx.rect(left, top, width, height)};
+        //imageObj.selectable = true
+        canvas.renderAll();
+      }
     });
 
     //some stuff
@@ -461,8 +494,8 @@ function App() {
     //console.log(output)
     output.onload = () => {
       const snap = new fabric.Image(output, {
-        left: 0,
-        top: 0,
+        left: 20,
+        top: 20,
         scaleX: .25,
         scaleY: .25
       });
@@ -652,6 +685,26 @@ function App() {
       paper.isDrawingMode = false;
       console.log('cropping image');
     }
+    const handleSelectCropObjects = () => {
+      //logics
+      imageObj = paper.getActiveObject();
+      imageObj.selectable = false;
+    }
+    const handleCutOut = () => {
+      //logics
+      var cc = paper.getObjects();
+      console.log(imageObj);
+      console.log(cc[1]);
+      //update
+      imageObj.set({
+        height: cc[1].height - imageObj.height,
+        width: cc[1].width - imageObj.width,
+        scaleX: 0.25,
+        scaleY: 0.25
+      });
+      imageObj.selectable = true;
+      paper.renderAll()
+    }
   return (
     <div className="container">
       <div className='row'>
@@ -672,6 +725,8 @@ function App() {
             <button className='btn btn-secondary' onClick={toggleAddText}>Add Text</button>
             <button className='btn btn-info' onClick={toggleAddImage}>Add Image</button>
             <button className='btn btn-warning' onClick={handleCropImage}>Crop Image</button>
+            <button className='btn btn-warning' onClick={handleSelectCropObjects}>Select Crop Objects</button>
+            <button className='btn btn-info' onClick={handleCutOut}>Cut Out</button>
             <button className='btn btn-success' onClick={saveCanvasToImage}>Save</button>
           </div>
           <div>
