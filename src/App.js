@@ -42,9 +42,20 @@ function App() {
     //draw shapes
     //use canvas
     var isDown = false;
-    var originX, originY, rect, ellipse, triangle, line, rectangleCrop = null;
+    var originX, originY, rect, ellipse, triangle, line = null;
     var crop = false;
-
+    
+    //draw a crop rectangle
+    var rectangle = new fabric.Rect({
+      fill: 'transparent',
+      originX: 'left',
+      originY: 'top',
+      stroke: '#1034a6',
+      strokeDashArray: [2, 2],
+      opacity: 1,
+      visible: false
+    });
+    canvas.add(rectangle);
     //mousedown
     canvas.on('mouse:down', (o)=>{
       isDown = true;
@@ -150,18 +161,22 @@ function App() {
         if(cropImageFlag){
           console.log('part of the deal');
           crop = true;
-          rectangleCrop = new fabric.Rect({
-            left: originX,
-            top: originY,
-            width: pointer.x - originX,
-            height: pointer.y - originY,
-            fill: 'transparent',
-            opacity: 1,
-            stroke: '#1034a6',
-            strokeDashArray: [2, 2],
-          });
-          canvas.add(rectangleCrop);
-          canvas.bringToFront(rectangleCrop);
+          //rectangleCrop = new fabric.Rect({
+          //  left: originX,
+          //  top: originY,
+          //  width: pointer.x - originX,
+          //  height: pointer.y - originY,
+          //  fill: 'transparent',
+          //  opacity: 1,
+          //  stroke: '#1034a6',
+          //  strokeDashArray: [2, 2],
+          //});
+          //canvas.add(rectangleCrop);
+          //canvas.bringToFront(rectangleCrop);
+          rectangle.left = originX;
+          rectangle.top = originY;
+          rectangle.visible = true;
+          canvas.bringToFront(rectangle);
         }
       }
     });
@@ -260,14 +275,22 @@ function App() {
         //}
         //draw crop rectangle area
         if(crop && cropImageFlag){
-          if(originX > pointer.y){
-            rectangleCrop.set({left: Math.abs(pointer.x)});
+          //if(originX > pointer.y){
+          //  rectangleCrop.set({left: Math.abs(pointer.x)});
+          //}
+          //if(originY > pointer.y){
+          //  rectangleCrop.set({top: Math.abs(pointer.y)});
+          //}
+          //rectangleCrop.set({width: Math.abs(originX - pointer.x)});
+          //rectangleCrop.set({height: Math.abs(originY - pointer.y)});
+          if(originX > pointer.x){
+            rectangle.set({left: Math.abs(pointer.x)});
           }
           if(originY > pointer.y){
-            rectangleCrop.set({top: Math.abs(pointer.y)});
+            rectangle.set({top: Math.abs(pointer.y)});
           }
-          rectangleCrop.set({width: Math.abs(originX - pointer.x)});
-          rectangleCrop.set({height: Math.abs(originY - pointer.y)});
+          rectangle.set({width: Math.abs(originX - pointer.x)});
+          rectangle.set({height: Math.abs(originY - pointer.y)});
         }
       }
       canvas.renderAll();
