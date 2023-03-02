@@ -693,17 +693,16 @@ function App() {
     const handleCutOut = () => {
       //logics
       var cc = paper.getObjects();
-      console.log(imageObj);
-      console.log(cc[1]);
-      //update
-      imageObj.set({
-        height: cc[1].height - imageObj.height,
-        width: cc[1].width - imageObj.width,
-        scaleX: 0.25,
-        scaleY: 0.25
+      console.log(cc);
+      let rectcrop = new fabric.Rect({
+        left: cc[1].left,
+        top: cc[1].top,
+        width: cc[1].getScaledWidth(),
+        height: cc[1].getScaledHeight(),
+        absolutePositioned: true
       });
-      imageObj.selectable = true;
-      paper.renderAll()
+      imageObj.clipPath = rectcrop;
+      paper.renderAll();
     }
   return (
     <div className="container">
