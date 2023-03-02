@@ -702,6 +702,8 @@ function App() {
         absolutePositioned: true
       });
       imageObj.clipPath = rectcrop;
+      imageObj.selectable = true;
+      cc[1].visible = false;
       paper.renderAll();
     }
   return (
