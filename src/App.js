@@ -694,16 +694,17 @@ function App() {
       //logics
       var cc = paper.getObjects();
       console.log(cc);
+      //console.log(imageObj.width/2);
+      //console.log(imageObj.height/2);
       let rectcrop = new fabric.Rect({
         left: cc[1].left,
         top: cc[1].top,
-        width: cc[1].getScaledWidth(),
-        height: cc[1].getScaledHeight(),
-        absolutePositioned: true
+        width: cc[1].width,
+        height: cc[1].height
       });
       imageObj.clipPath = rectcrop;
       imageObj.selectable = true;
-      cc[1].visible = false;
+      //cc[1].visible = false;
       paper.renderAll();
     }
   return (
