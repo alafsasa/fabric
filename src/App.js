@@ -494,10 +494,10 @@ function App() {
     //console.log(output)
     output.onload = () => {
       const snap = new fabric.Image(output, {
-        left: 20,
-        top: 20,
-        scaleX: .25,
-        scaleY: .25
+        left: 0,
+        top: 0,
+        scaleX: 0.5,
+        scaleY: 0.5
       });
       paper.add(snap);
     }
@@ -694,13 +694,13 @@ function App() {
       //logics
       var cc = paper.getObjects();
       console.log(cc);
-      //console.log(imageObj.width/2);
-      //console.log(imageObj.height/2);
+      //var scaledImageWidth = imageObj.width;
+      //var scaledImageHeight = imageObj.height;
       let rectcrop = new fabric.Rect({
-        left: cc[1].left,
-        top: cc[1].top,
-        width: cc[1].width,
-        height: cc[1].height
+        left: -250,
+        top:  -250,
+        width: 250,
+        height: 250
       });
       imageObj.clipPath = rectcrop;
       imageObj.selectable = true;
