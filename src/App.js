@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import './App.css';
 import { fabric } from 'fabric';
 import { ColorPicker, useColor } from 'react-color-palette';
+import Modal from 'react-modal'
 import 'react-color-palette/lib/css/styles.css';
 
 //global
@@ -15,6 +16,20 @@ var cropImageFlag = false;
 //var drawFreeHandFlag = false;
 var imageObj;
 
+//custom styles
+const customStyles = {
+  content: {
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    marginRight: '-50%',
+    transform: 'translate(-50%, -50%'
+  }
+};
+
+Modal.setAppElement('#root');
+
 function App() {
   const [paper, setPaper] = useState(null);
   const [color, setColor] = useColor("hex", "#1034a6");
@@ -27,6 +42,7 @@ function App() {
   const [checkItalic, setCheckItalic] = useState(false);
   const [checkLineThrough, setCheckLineThrough] = useState(false);
   const [checkUnderline, setCheckUnderline] = useState(false);
+  const [modalIsOpen, setIsOpen] = useState(false);
   //const [imagepreview, setImagePreview] = useState('');
   const kanvas = useRef();
 
@@ -496,8 +512,8 @@ function App() {
       const snap = new fabric.Image(output, {
         left: 0,
         top: 0,
-        scaleX: 0.5,
-        scaleY: 0.5
+        scaleX: 1,
+        scaleY: 1
       });
       paper.add(snap);
     }
@@ -694,18 +710,40 @@ function App() {
       //logics
       var cc = paper.getObjects();
       console.log(cc);
-      //var scaledImageWidth = imageObj.width;
-      //var scaledImageHeight = imageObj.height;
-      let rectcrop = new fabric.Rect({
-        left: -250,
-        top:  -250,
-        width: 250,
-        height: 250
-      });
-      imageObj.clipPath = rectcrop;
-      imageObj.selectable = true;
-      //cc[1].visible = false;
-      paper.renderAll();
+      var ImageWidth = imageObj.width/2;
+      var ImageHeight = imageObj.height/2;
+      var rectCL = cc[1].left;
+      var rectCT = cc[1].top;
+      var ln = 0;
+      var tn = 0;
+      if(rectCL < ImageWidth){
+        ln = rectCL - ImageWidth;
+      }else{
+        ln = rectCL;
+      }
+      if(rectCT < ImageHeight){
+        tn = rectCT - ImageHeight;
+      }else{
+        tn = rectCT;
+      }
+      console.log(ln);
+      console.log(tn);
+      //let rectcrop = new fabric.Rect({
+      //  left: ln,
+      //  top:  tn,
+      //  width: cc[1].width,
+      //  height: cc[1].height
+      //});
+      //imageObj.clipPath = rectcrop;
+      //imageObj.selectable = true;
+      ////cc[1].visible = false;
+      //paper.renderAll();
+    }
+    const openModal = () => {
+      setIsOpen(true);
+    }
+    const closeModal = () => {
+      setIsOpen(false);
     }
   return (
     <div className="container">
@@ -729,7 +767,13 @@ function App() {
             <button className='btn btn-warning' onClick={handleCropImage}>Crop Image</button>
             <button className='btn btn-warning' onClick={handleSelectCropObjects}>Select Crop Objects</button>
             <button className='btn btn-info' onClick={handleCutOut}>Cut Out</button>
+            <button className='btn btn-secondary' onClick={openModal}>Crop Modal</button>
             <button className='btn btn-success' onClick={saveCanvasToImage}>Save</button>
+            <Modal isOpen={modalIsOpen} onRequestClose={closeModal} style={customStyles} contentLabel="Example Modal">
+              <div>
+                <canvas ref={kanvas-2} height={600} width={400}></canvas>
+              </div>
+            </Modal>
           </div>
           <div>
             <div>
