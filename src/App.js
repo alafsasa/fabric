@@ -45,7 +45,7 @@ function App() {
   const [modalIsOpen, setIsOpen] = useState(false);
   //const [imagepreview, setImagePreview] = useState('');
   const kanvas = useRef();
-
+  const kanvasB = useRef();
   //get canvas
   function exposeCanvas(canvas){
     //console.log(x)
@@ -54,6 +54,7 @@ function App() {
   //logic
   useEffect(()=>{
     var canvas = new fabric.Canvas(kanvas.current, {backgroundColor: '#ddd', isDrawingMode: false});
+    var canvasB = new fabric.Canvas(kanvasB.current, {backgroundColor: '#f4f8fb', isDrawingMode: false});
     //make canvas publicly available
     exposeCanvas(canvas);
     //draw shapes
@@ -751,7 +752,14 @@ function App() {
         <div className='col-sm-12'>
           <div className='display-4'>Lueminour</div>
           <div className='display-3'>FabricJs Meme Creator</div>
+        </div>
+        <div className='col-sm-6'>
           <canvas ref={kanvas} width={500} height={500}></canvas>
+        </div>
+        <div className='col-sm-6'>
+          <canvas ref={kanvasB} width={500} height={500}></canvas>
+        </div>
+        <div className='col-sm-12'>
           <div className='mt-3'>
             <button className='btn btn-info' onClick={isSelected}>Select Objects</button>
             <button className='btn btn-danger' onClick={deleteObj}>Delete</button>
@@ -769,10 +777,8 @@ function App() {
             <button className='btn btn-info' onClick={handleCutOut}>Cut Out</button>
             <button className='btn btn-secondary' onClick={openModal}>Crop Modal</button>
             <button className='btn btn-success' onClick={saveCanvasToImage}>Save</button>
-            <Modal isOpen={modalIsOpen} onRequestClose={closeModal} style={customStyles} contentLabel="Example Modal">
-              <div>
-                <canvas ref={kanvas-2} height={600} width={400}></canvas>
-              </div>
+            <Modal isOpen={modalIsOpen} onRequestClose={closeModal} style={customStyles} contentLabel="Modal-x">
+              <button className='btn btn-danger'>close</button>
             </Modal>
           </div>
           <div>
