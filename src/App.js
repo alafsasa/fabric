@@ -32,6 +32,7 @@ Modal.setAppElement('#root');
 
 function App() {
   const [paper, setPaper] = useState(null);
+  const [paperB, setPaperB] = useState(null);
   const [color, setColor] = useColor("hex", "#1034a6");
   const [spinNumber, setSpinNumber] = useState(0);
   const [selectedFont, setSelectedFont] = useState('sans-serif');
@@ -51,12 +52,17 @@ function App() {
     //console.log(x)
     setPaper(canvas);
   }
+  //get the second canvas
+  const exposeCanvasB = (canvasB) => {
+    setPaperB(canvasB);
+  }
   //logic
   useEffect(()=>{
     var canvas = new fabric.Canvas(kanvas.current, {backgroundColor: '#ddd', isDrawingMode: false});
-    var canvasB = new fabric.Canvas(kanvasB.current, {backgroundColor: '#f4f8fb', isDrawingMode: false});
+    var canvasB = new fabric.Canvas(kanvasB.current, {backgroundColor: '#f4f8fb'});
     //make canvas publicly available
     exposeCanvas(canvas);
+    exposeCanvasB(canvasB);
     //draw shapes
     //use canvas
     var isDown = false;
@@ -720,25 +726,29 @@ function App() {
       if(rectCL < ImageWidth){
         ln = rectCL - ImageWidth;
       }else{
-        ln = rectCL;
+        ln = rectCL - ImageWidth;
       }
       if(rectCT < ImageHeight){
         tn = rectCT - ImageHeight;
       }else{
-        tn = rectCT;
+        tn = rectCT - ImageHeight;
       }
+      //console.log(ImageWidth);
+      //console.log(ImageHeight);
+      //console.log('L',rectCL);
+      //console.log('T', rectCT);
       console.log(ln);
       console.log(tn);
-      //let rectcrop = new fabric.Rect({
-      //  left: ln,
-      //  top:  tn,
-      //  width: cc[1].width,
-      //  height: cc[1].height
-      //});
-      //imageObj.clipPath = rectcrop;
-      //imageObj.selectable = true;
-      ////cc[1].visible = false;
-      //paper.renderAll();
+      let rectcrop = new fabric.Rect({
+        left: ln,
+        top:  tn,
+        width: cc[1].width,
+        height: cc[1].height
+      });
+      imageObj.clipPath = rectcrop;
+      imageObj.selectable = true;
+      //cc[1].visible = false;
+      paper.renderAll();
     }
     const openModal = () => {
       setIsOpen(true);
@@ -746,11 +756,26 @@ function App() {
     const closeModal = () => {
       setIsOpen(false);
     }
+    //image kropper
+    const kropper = () => {
+      //logics
+      console.log(paper.getActiveObject());
+      //add active object to the second
+    }
+    //draw a rectangle to paperB
+    const rectB = new fabric.Rect({
+      left: 20,
+      top: 20,
+      width: 200,
+      height: 200,
+      fill: 'red',
+      selectable: true
+    });
+    //paperB.add(rectB)
   return (
     <div className="container">
       <div className='row'>
         <div className='col-sm-12'>
-          <div className='display-4'>Lueminour</div>
           <div className='display-3'>FabricJs Meme Creator</div>
         </div>
         <div className='col-sm-6'>
@@ -776,6 +801,7 @@ function App() {
             <button className='btn btn-warning' onClick={handleSelectCropObjects}>Select Crop Objects</button>
             <button className='btn btn-info' onClick={handleCutOut}>Cut Out</button>
             <button className='btn btn-secondary' onClick={openModal}>Crop Modal</button>
+            <button className='btn btn-danger' onClick={kropper}>KropMe</button>
             <button className='btn btn-success' onClick={saveCanvasToImage}>Save</button>
             <Modal isOpen={modalIsOpen} onRequestClose={closeModal} style={customStyles} contentLabel="Modal-x">
               <button className='btn btn-danger'>close</button>
