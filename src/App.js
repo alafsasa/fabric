@@ -52,14 +52,14 @@ function App() {
     //console.log(x)
     setPaper(canvas);
   }
-  //get the second canvas
-  const exposeCanvasB = (canvasB) => {
+  //get canvasB
+  function exposeCanvasB(canvasB){
     setPaperB(canvasB);
   }
   //logic
   useEffect(()=>{
     var canvas = new fabric.Canvas(kanvas.current, {backgroundColor: '#ddd', isDrawingMode: false});
-    var canvasB = new fabric.Canvas(kanvasB.current, {backgroundColor: '#f4f8fb'});
+    var canvasB = new fabric.Canvas(kanvasB.current, {backgroundColor: '#f4f8fb', isDrawingMode: false});
     //make canvas publicly available
     exposeCanvas(canvas);
     exposeCanvasB(canvasB);
@@ -80,6 +80,7 @@ function App() {
       visible: false
     });
     canvas.add(rectangle);
+    //canvasB
     //mousedown
     canvas.on('mouse:down', (o)=>{
       isDown = true;
@@ -364,6 +365,11 @@ function App() {
       if(canvas){
         canvas.dispose();
         canvas = undefined;
+      }
+      //clear canvasB
+      if(canvasB){
+        canvasB.dispose();
+        canvasB = undefined;
       }
     }
   }, []);
@@ -748,30 +754,36 @@ function App() {
       imageObj.clipPath = rectcrop;
       imageObj.selectable = true;
       //cc[1].visible = false;
-      paper.renderAll();
+       paper.renderAll();
     }
     const openModal = () => {
       setIsOpen(true);
+      console.log(paper.getActiveObject());
+      //define canvas logic
+      //var kk = new fabric.Canvas(kanvasB.current, {backgroundColor: '#ddd'});
+      //kk.set({backgroundColor: '#333'})
     }
     const closeModal = () => {
       setIsOpen(false);
     }
-    //image kropper
-    const kropper = () => {
-      //logics
+    //unit testing
+    const handleKrop = () => {
+      //krop logics
+      //console.log(paperB);
+      //console.log(paper.getActiveObject());
+      //paperB.add(paper.getActiveObject());
+      //paperB.renderAll();
+      //var rectt = new fabric.Rect({
+      //  left: 0,
+      //  top: 0,
+      //  width: 200,
+      //  height: 200,
+      //  fill: 'red'
+      //});
+      //paperB.add(rectt);
       console.log(paper.getActiveObject());
-      //add active object to the second
+      paperB.add(paper.getActiveObject().set({selectable: false}));
     }
-    //draw a rectangle to paperB
-    const rectB = new fabric.Rect({
-      left: 20,
-      top: 20,
-      width: 200,
-      height: 200,
-      fill: 'red',
-      selectable: true
-    });
-    //paperB.add(rectB)
   return (
     <div className="container">
       <div className='row'>
@@ -801,10 +813,10 @@ function App() {
             <button className='btn btn-warning' onClick={handleSelectCropObjects}>Select Crop Objects</button>
             <button className='btn btn-info' onClick={handleCutOut}>Cut Out</button>
             <button className='btn btn-secondary' onClick={openModal}>Crop Modal</button>
-            <button className='btn btn-danger' onClick={kropper}>KropMe</button>
+            <button className='btn btn-danger' onClick={handleKrop}>Krop</button>
             <button className='btn btn-success' onClick={saveCanvasToImage}>Save</button>
-            <Modal isOpen={modalIsOpen} onRequestClose={closeModal} style={customStyles} contentLabel="Modal-x">
-              <button className='btn btn-danger'>close</button>
+            <Modal isOpen={modalIsOpen} style={customStyles} contentLabel="Modal-x">
+              <button className='btn btn-danger' onClick={closeModal}>close</button>
             </Modal>
           </div>
           <div>
