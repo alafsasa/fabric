@@ -80,6 +80,7 @@ function App() {
       visible: false
     });
     canvas.add(rectangle);
+    canvasB.add(rectangle);
     //canvasB
     //mousedown
     canvas.on('mouse:down', (o)=>{
@@ -210,6 +211,7 @@ function App() {
         rectangle.top = originY;
         rectangle.visible = true;
         canvas.bringToFront(rectangle);
+        canvasB.bringToFront(rectangle)
       }
     });
     //mousemove
@@ -326,6 +328,7 @@ function App() {
         }
       }
       canvas.renderAll();
+      canvasB.renderAll();
     });
     //mouse up
     canvas.on('mouse:up', (o)=>{
