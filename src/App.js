@@ -61,12 +61,14 @@ function App() {
   useEffect(()=>{
     var canvas = new fabric.Canvas(kanvas.current, {backgroundColor: '#ddd', isDrawingMode: false});
     var canvasB = new fabric.Canvas(kanvasB.current, {backgroundColor: '#f4f8fb', isDrawingMode: false});
+    canvasB.preserveObjectStacking = true;
     //make canvas publicly available
     exposeCanvas(canvas);
     exposeCanvasB(canvasB);
     //draw shapes
     //use canvas
     var isDown = false;
+    var isDownB = false;
     var originX, originY, rect, ellipse, triangle, line = null;
     var crop = false;
     
@@ -82,6 +84,7 @@ function App() {
     });
     canvas.add(rectangle);
     canvasB.add(rectangle);
+    //unit test
     //canvasB
     //mousedown
     canvas.on('mouse:down', (o)=>{
@@ -216,6 +219,7 @@ function App() {
       }
     });
     canvasB.on('mouse:down', (o)=>{
+      isDownB = true;
       var pointer = canvasB.getPointer(o.e);
       originX = pointer.x;
       originY = pointer.y;
@@ -344,7 +348,24 @@ function App() {
       //canvasB.renderAll();
     });
     canvasB.on('mouse:move', (o)=>{
+      if(!isDownB){
+        return;
+      }
       var pointer = canvasB.getPointer(o.e);
+      var isSelectedObj = false;
+      var objChecker = canvasB.getActiveObject();
+      if(objChecker === null || objChecker === undefined){
+        console.log('no obj');;
+        isSelectedObj = true;
+      }else{
+        console.log('yes obj');
+        isSelectedObj = false;
+      }
+      if(isSelectedObj){
+        //logics
+      }
+      //get active object
+      
       if(crop && cropImageFlag){
         if(originX > pointer.x){
           rectangle.set({left: Math.abs(pointer.x)});
@@ -388,6 +409,7 @@ function App() {
       }
     });
     canvasB.on('mouse:up', ()=>{
+      isDownB = false;
       crop = false;
     });
 
@@ -805,6 +827,8 @@ function App() {
       console.log(paper.getActiveObject());
       paperB.add(paper.getActiveObject().set({selectable: false}));
       addSelectionRect();
+      paperB.setActiveObject(selectionRect);
+      paperB.renderAll();
     }
     const addSelectionRect = () => {
       //logics
@@ -816,12 +840,18 @@ function App() {
         opacity: 1,
         width: 200,
         height: 200,
-        hasRotatingPoint: false,
-        transparentCorners: false,
         cornerColor: 'white',
         cornerStrokeColor: 'black',
         borderColor: 'black'
       });
+      paperB.centerObject(selectionRect);
+      selectionRect.visible = true;
+      selectionRect.setControlsVisibility({mtr: false});
+      paperB.add(selectionRect);
+    }
+    const handleKropOut = () => {
+      //logics
+      console.log(paperB.getActiveObject());
     }
   return (
     <div className="container">
@@ -853,6 +883,7 @@ function App() {
             <button className='btn btn-info' onClick={handleCutOut}>Cut Out</button>
             <button className='btn btn-secondary' onClick={openModal}>Crop Modal</button>
             <button className='btn btn-danger' onClick={handleKrop}>Krop</button>
+            <button className='btn btn-info' onClick={handleKropOut}>Krop-Out</button>
             <button className='btn btn-success' onClick={saveCanvasToImage}>Save</button>
             <Modal isOpen={modalIsOpen} style={customStyles} contentLabel="Modal-x">
               <button className='btn btn-danger' onClick={closeModal}>close</button>
