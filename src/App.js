@@ -80,7 +80,7 @@ function App() {
       stroke: '#1034a6',
       strokeDashArray: [2, 2],
       opacity: 1,
-      visible: false
+      visible: false,
     });
     canvas.add(rectangle);
     canvasB.add(rectangle);
@@ -221,6 +221,20 @@ function App() {
     canvasB.on('mouse:down', (o)=>{
       isDownB = true;
       var pointer = canvasB.getPointer(o.e);
+      //var isSelectedObj = false;
+      //var objChecker = canvasB.getActiveObject();
+      //if(objChecker === null || objChecker === undefined){
+      //  console.log('no obj');
+      //  isSelectedObj = true;
+      //}else{
+      //  console.log('yes obj');
+      //  isSelectedObj = false;
+      //}
+      //if(!isSelectedObj){
+      //  //console.log(objChecker.width);
+      //  objChecker.left = originX;
+      //  objChecker.top = originY;
+      //}
       originX = pointer.x;
       originY = pointer.y;
       if(cropImageFlag){
@@ -352,18 +366,32 @@ function App() {
         return;
       }
       var pointer = canvasB.getPointer(o.e);
-      var isSelectedObj = false;
-      var objChecker = canvasB.getActiveObject();
-      if(objChecker === null || objChecker === undefined){
-        console.log('no obj');;
-        isSelectedObj = true;
-      }else{
-        console.log('yes obj');
-        isSelectedObj = false;
-      }
-      if(isSelectedObj){
-        //logics
-      }
+      originX = pointer.x;
+      originY = pointer.y;
+      //var isSelectedObj = false;
+      //var objChecker = canvasB.getActiveObject();
+      //if(objChecker === null || objChecker === undefined){
+      //  console.log('no obj');;
+      //  isSelectedObj = true;
+      //}else{
+      //  console.log('yes obj');
+      //  isSelectedObj = false;
+      //}
+      //if(!isSelectedObj){
+      //  //logics
+      //  //console.log(objChecker);
+      //  //if(originX > pointer.x){
+      //  //  objChecker.set({left: Math.abs(pointer.x)});
+      //  //}
+      //  //if(originY > pointer.y){
+      //  //  objChecker.set({top: Math.abs(pointer.y)});
+      //  //}
+      //  //objChecker.set({width: Math.abs(originX - pointer.x)});
+      //  //objChecker.set({height: Math.abs(originY - pointer.y)});
+      //  //console.log(objChecker.);
+      //  objChecker.set({width: objChecker.getScaledWidth()});
+      //  objChecker.set({height: objChecker.getScaledHeight()});
+      //}
       //get active object
       
       if(crop && cropImageFlag){
