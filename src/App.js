@@ -13,6 +13,7 @@ var drawCircleFlag = false;
 var drawStraightLineFlag = false;
 var drawDashedLineFlag = false;
 var cropImageFlag = false;
+var selectionRect;
 //var drawFreeHandFlag = false;
 var imageObj;
 
@@ -211,7 +212,19 @@ function App() {
         rectangle.top = originY;
         rectangle.visible = true;
         canvas.bringToFront(rectangle);
-        canvasB.bringToFront(rectangle)
+        //canvasB.bringToFront(rectangle)
+      }
+    });
+    canvasB.on('mouse:down', (o)=>{
+      var pointer = canvasB.getPointer(o.e);
+      originX = pointer.x;
+      originY = pointer.y;
+      if(cropImageFlag){
+        crop = true;
+        rectangle.left = originX;
+        rectangle.top = originY;
+        rectangle.visible = true;
+        canvasB.bringToFront(rectangle);
       }
     });
     //mousemove
@@ -328,6 +341,20 @@ function App() {
         }
       }
       canvas.renderAll();
+      //canvasB.renderAll();
+    });
+    canvasB.on('mouse:move', (o)=>{
+      var pointer = canvasB.getPointer(o.e);
+      if(crop && cropImageFlag){
+        if(originX > pointer.x){
+          rectangle.set({left: Math.abs(pointer.x)});
+        }
+        if(originY > pointer.y){
+          rectangle.set({top: Math.abs(pointer.y)});
+        }
+        rectangle.set({width: Math.abs(originX - pointer.x)});
+        rectangle.set({height: Math.abs(originY - pointer.y)});
+      }
       canvasB.renderAll();
     });
     //mouse up
@@ -359,6 +386,9 @@ function App() {
         //imageObj.selectable = true
         canvas.renderAll();
       }
+    });
+    canvasB.on('mouse:up', ()=>{
+      crop = false;
     });
 
     //some stuff
@@ -772,20 +802,26 @@ function App() {
     //unit testing
     const handleKrop = () => {
       //krop logics
-      //console.log(paperB);
-      //console.log(paper.getActiveObject());
-      //paperB.add(paper.getActiveObject());
-      //paperB.renderAll();
-      //var rectt = new fabric.Rect({
-      //  left: 0,
-      //  top: 0,
-      //  width: 200,
-      //  height: 200,
-      //  fill: 'red'
-      //});
-      //paperB.add(rectt);
       console.log(paper.getActiveObject());
       paperB.add(paper.getActiveObject().set({selectable: false}));
+      addSelectionRect();
+    }
+    const addSelectionRect = () => {
+      //logics
+      selectionRect = new fabric.Rect({
+        fill: 'rgba(0, 0, 0, 0.3)',
+        originX: 'left',
+        originY: 'top',
+        stroke: 'black',
+        opacity: 1,
+        width: 200,
+        height: 200,
+        hasRotatingPoint: false,
+        transparentCorners: false,
+        cornerColor: 'white',
+        cornerStrokeColor: 'black',
+        borderColor: 'black'
+      });
     }
   return (
     <div className="container">
