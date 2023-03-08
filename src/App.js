@@ -885,6 +885,35 @@ function App() {
       console.log('T', paperB.getActiveObject().top);
       console.log('S-Width', paperB.getActiveObject().getScaledWidth());
       console.log('S-Height', paperB.getActiveObject().getScaledHeight());
+      console.log(paperB.getObjects()[1]);
+      //clipping logics
+      var ImageHeight = paperB.getObjects()[1].height / 2;
+      var ImageWidth = paperB.getObjects()[1].width / 2;
+      var rectCL = paperB.getActiveObject().left;
+      var rectCT = paperB.getActiveObject().top;
+      var ln = 0; var tn = 0;
+      if(rectCL < ImageWidth){
+        ln = rectCL - ImageWidth;
+      }else{
+        ln = rectCL - ImageWidth;
+      }
+      if(rectCT < ImageHeight){
+        tn = rectCT - ImageHeight;
+      }else{
+        tn = rectCT - ImageHeight;
+      }
+      console.log(ln);
+      console.log(tn);
+      //crop the image - clip
+      let rectcrop = new fabric.Rect({
+        left: ln,
+        top: tn,
+        width: paperB.getActiveObject().getScaledWidth(),
+        height: paperB.getActiveObject().getScaledHeight()
+      });
+      paperB.getObjects()[1].clipPath = rectcrop;
+      paperB.getObjects()[1].selectable = true;
+      paperB.renderAll();
     }
   return (
     <div className="container">
