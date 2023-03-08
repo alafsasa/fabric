@@ -380,17 +380,18 @@ function App() {
       //if(!isSelectedObj){
       //  //logics
       //  //console.log(objChecker);
-      //  //if(originX > pointer.x){
-      //  //  objChecker.set({left: Math.abs(pointer.x)});
-      //  //}
-      //  //if(originY > pointer.y){
-      //  //  objChecker.set({top: Math.abs(pointer.y)});
-      //  //}
+      //  if(originX > pointer.x){
+      //    objChecker.set({left: Math.abs(pointer.x)});
+      //  }
+      //  if(originY > pointer.y){
+      //    objChecker.set({top: Math.abs(pointer.y)});
+      //  }
       //  //objChecker.set({width: Math.abs(originX - pointer.x)});
       //  //objChecker.set({height: Math.abs(originY - pointer.y)});
-      //  //console.log(objChecker.);
-      //  objChecker.set({width: objChecker.getScaledWidth()});
-      //  objChecker.set({height: objChecker.getScaledHeight()});
+      //  //console.log(Math.abs(objChecker.getScaledWidth()));
+      //  //console.log(Math.abs(objChecker.getScaledHeight()));
+      //  //objChecker.set({width: Math.abs(objChecker.getScaledWidth())});
+      //  //objChecker.set({height: Math.abs(objChecker.getScaledHeight())});
       //}
       //get active object
       
@@ -880,6 +881,10 @@ function App() {
     const handleKropOut = () => {
       //logics
       console.log(paperB.getActiveObject());
+      console.log('L', paperB.getActiveObject().left);
+      console.log('T', paperB.getActiveObject().top);
+      console.log('S-Width', paperB.getActiveObject().getScaledWidth());
+      console.log('S-Height', paperB.getActiveObject().getScaledHeight());
     }
   return (
     <div className="container">
