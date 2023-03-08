@@ -858,6 +858,8 @@ function App() {
       addSelectionRect();
       paperB.setActiveObject(selectionRect);
       paperB.renderAll();
+      paper.remove(paper.getActiveObject());
+      paper.renderAll();
     }
     const addSelectionRect = () => {
       //logics
@@ -904,6 +906,7 @@ function App() {
       }
       console.log(ln);
       console.log(tn);
+      var x = paperB.getObjects()[1];
       //crop the image - clip
       let rectcrop = new fabric.Rect({
         left: ln,
@@ -914,6 +917,14 @@ function App() {
       paperB.getObjects()[1].clipPath = rectcrop;
       paperB.getObjects()[1].selectable = true;
       paperB.renderAll();
+      //add back the cropped image
+      console.log('image', x);
+      paper.add(x);
+      //delete the obj
+      //paperB.remove(paperB.getObjects()[1]);
+      paperB.remove(selectionRect);
+      //paperB.renderAll();
+      //paper.renderAll();
     }
   return (
     <div className="container">
