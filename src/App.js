@@ -916,6 +916,7 @@ function App() {
       });
       paperB.getObjects()[1].clipPath = rectcrop;
       paperB.getObjects()[1].selectable = true;
+      //paperB.setActiveObject(paperB.getObjects()[1]);
       paperB.renderAll();
       //add back the cropped image
       console.log('image', x);
@@ -923,8 +924,20 @@ function App() {
       //delete the obj
       //paperB.remove(paperB.getObjects()[1]);
       paperB.remove(selectionRect);
+      //console.log(paperB.getActiveObject());
       //paperB.renderAll();
       //paper.renderAll();
+      removeGarbageOnPaperB();
+    }
+    const removeGarbageOnPaperB = () => {
+      //logics
+      console.log('cleaner', paperB.getObjects()[1]);
+      //clear canvas
+      paperB.remove(paperB.getObjects()[0]);
+    }
+    const handleUnitTest = () => {
+      //logics
+      console.log(paperB.getObjects());
     }
   return (
     <div className="container">
@@ -957,6 +970,7 @@ function App() {
             <button className='btn btn-secondary' onClick={openModal}>Crop Modal</button>
             <button className='btn btn-danger' onClick={handleKrop}>Krop</button>
             <button className='btn btn-info' onClick={handleKropOut}>Krop-Out</button>
+            <button className='btn btn-warning' onClick={handleUnitTest}>Unit-Test</button>
             <button className='btn btn-success' onClick={saveCanvasToImage}>Save</button>
             <Modal isOpen={modalIsOpen} style={customStyles} contentLabel="Modal-x">
               <button className='btn btn-danger' onClick={closeModal}>close</button>
