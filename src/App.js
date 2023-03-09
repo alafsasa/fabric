@@ -917,15 +917,16 @@ function App() {
       paperB.getObjects()[1].clipPath = rectcrop;
       paperB.getObjects()[1].selectable = true;
       //paperB.setActiveObject(paperB.getObjects()[1]);
-      paperB.renderAll();
+      //paperB.renderAll();
       //add back the cropped image
       console.log('image', x);
-      paper.add(x);
+      paper.add(x)
+      //paper.renderAll();
       //delete the obj
       //paperB.remove(paperB.getObjects()[1]);
-      paperB.remove(selectionRect);
+      //paperB.remove(selectionRect);
       //console.log(paperB.getActiveObject());
-      //paperB.renderAll();
+      paperB.renderAll();
       //paper.renderAll();
       removeGarbageOnPaperB();
     }
@@ -933,11 +934,20 @@ function App() {
       //logics
       console.log('cleaner', paperB.getObjects()[1]);
       //clear canvas
-      paperB.remove(paperB.getObjects()[0]);
+      //paperB.remove(paperB.getObjects()[0]);
+      //paperB.getObjects().forEach((n)=>{
+      //  //console.log('objects', n);
+      //  paperB.remove(n)
+      //});
+      //paperB.renderAll();
+      //paperB.clear().renderAll();
     }
     const handleUnitTest = () => {
       //logics
-      console.log(paperB.getObjects());
+      console.log(paperB.getActiveObject())
+      paperB.remove(paperB.getActiveObject());
+      paperB.renderAll();
+      //paper
     }
   return (
     <div className="container">
