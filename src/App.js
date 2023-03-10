@@ -16,6 +16,7 @@ var cropImageFlag = false;
 var selectionRect;
 //var drawFreeHandFlag = false;
 var imageObj;
+var imageObjB;
 
 //custom styles
 const customStyles = {
@@ -858,8 +859,8 @@ function App() {
       addSelectionRect();
       paperB.setActiveObject(selectionRect);
       paperB.renderAll();
-      //paper.remove(paper.getActiveObject());
-      //paper.renderAll();
+      paper.remove(paper.getActiveObject());
+      paper.renderAll();
     }
     const addSelectionRect = () => {
       //logics
@@ -921,27 +922,29 @@ function App() {
       //add back the cropped image
       console.log('image', x);
       //paper.add(x)
+      imageObjB = x;
       //paper.renderAll();
       //delete the obj
       //paperB.remove(paperB.getObjects()[1]);
       //paperB.remove(selectionRect);
       //console.log(paperB.getActiveObject());
-      const uR = new fabric.Rect({
-        left: 20,
-        top: 20,
-        width: 100,
-        height: 100,
-        fill: 'green'
-      });
-      paperB.add(uR);
+      //const uR = new fabric.Rect({
+      //  left: 20,
+      //  top: 20,
+      //  width: 100,
+      //  height: 100,
+      //  fill: 'green'
+      //});
+      //paperB.add(uR);
       //paperB.remove(x)
+      paperB.clear();
       paperB.renderAll();
       //paper.renderAll();
       removeGarbageOnPaperB();
     }
     const removeGarbageOnPaperB = () => {
       //logics
-      console.log('cleaner', paperB.getObjects()[1]);
+      //console.log('cleaner', paperB.getObjects()[1]);
       //clear canvas
       //paperB.remove(paperB.getObjects()[0]);
       //paperB.getObjects().forEach((n)=>{
@@ -950,6 +953,8 @@ function App() {
       //});
       //paperB.renderAll();
       //paperB.clear().renderAll();
+      paper.add(imageObjB);
+      paper.renderAll();
     }
     const handleUnitTest = () => {
       //logics
@@ -962,7 +967,8 @@ function App() {
     //delete objects on the canvasB
     const handleDeleteObjectsCanvasB = () => {
       //logics
-      
+      //paperB.clear().renderAll()
+      console.log(imageObjB);
     }
   return (
     <div className="container">
