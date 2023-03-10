@@ -858,8 +858,8 @@ function App() {
       addSelectionRect();
       paperB.setActiveObject(selectionRect);
       paperB.renderAll();
-      paper.remove(paper.getActiveObject());
-      paper.renderAll();
+      //paper.remove(paper.getActiveObject());
+      //paper.renderAll();
     }
     const addSelectionRect = () => {
       //logics
@@ -920,12 +920,21 @@ function App() {
       //paperB.renderAll();
       //add back the cropped image
       console.log('image', x);
-      paper.add(x)
+      //paper.add(x)
       //paper.renderAll();
       //delete the obj
       //paperB.remove(paperB.getObjects()[1]);
       //paperB.remove(selectionRect);
       //console.log(paperB.getActiveObject());
+      const uR = new fabric.Rect({
+        left: 20,
+        top: 20,
+        width: 100,
+        height: 100,
+        fill: 'green'
+      });
+      paperB.add(uR);
+      //paperB.remove(x)
       paperB.renderAll();
       //paper.renderAll();
       removeGarbageOnPaperB();
@@ -944,16 +953,22 @@ function App() {
     }
     const handleUnitTest = () => {
       //logics
-      console.log(paperB.getActiveObject())
-      paperB.remove(paperB.getActiveObject());
-      paperB.renderAll();
+      //console.log(paperB.getActiveObject())
+      //paperB.remove(paperB.getActiveObject());
+      //paperB.renderAll();
       //paper
+      console.log(paperB.getObjects());
+    }
+    //delete objects on the canvasB
+    const handleDeleteObjectsCanvasB = () => {
+      //logics
+      
     }
   return (
     <div className="container">
       <div className='row'>
         <div className='col-sm-12'>
-          <div className='display-3'>FabricJs Meme Creator</div>
+          <div className='display-3'>Fabric M.CT</div>
         </div>
         <div className='col-sm-6'>
           <canvas ref={kanvas} width={500} height={500}></canvas>
@@ -981,6 +996,7 @@ function App() {
             <button className='btn btn-danger' onClick={handleKrop}>Krop</button>
             <button className='btn btn-info' onClick={handleKropOut}>Krop-Out</button>
             <button className='btn btn-warning' onClick={handleUnitTest}>Unit-Test</button>
+            <button className='btn btn-secondary' onClick={handleDeleteObjectsCanvasB}>Garbage</button>
             <button className='btn btn-success' onClick={saveCanvasToImage}>Save</button>
             <Modal isOpen={modalIsOpen} style={customStyles} contentLabel="Modal-x">
               <button className='btn btn-danger' onClick={closeModal}>close</button>
