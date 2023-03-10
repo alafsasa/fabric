@@ -609,10 +609,10 @@ function App() {
     output.onload = () => {
       const snap = new fabric.Image(output, {
         left: 0,
-        top: 0,
-        scaleX: 1,
-        scaleY: 1
+        top: 0
       });
+      snap.scaleToWidth(500);
+      snap.scaleToHeight(500);
       paper.add(snap);
     }
     //free memory
@@ -926,7 +926,7 @@ function App() {
       //paper.renderAll();
       //delete the obj
       //paperB.remove(paperB.getObjects()[1]);
-      //paperB.remove(selectionRect);
+      paperB.remove(selectionRect);
       //console.log(paperB.getActiveObject());
       //const uR = new fabric.Rect({
       //  left: 20,
@@ -936,8 +936,8 @@ function App() {
       //  fill: 'green'
       //});
       //paperB.add(uR);
-      //paperB.remove(x)
-      paperB.clear();
+      paperB.remove(x)
+      //paperB.clear();
       paperB.renderAll();
       //paper.renderAll();
       removeGarbageOnPaperB();
@@ -953,6 +953,9 @@ function App() {
       //});
       //paperB.renderAll();
       //paperB.clear().renderAll();
+      //imageObjB.setCoords();
+      console.log('toscale', imageObjB);
+      //imageObjB.set({scaleX: 2})
       paper.add(imageObjB);
       paper.renderAll();
     }
@@ -968,7 +971,6 @@ function App() {
     const handleDeleteObjectsCanvasB = () => {
       //logics
       //paperB.clear().renderAll()
-      console.log(imageObjB);
     }
   return (
     <div className="container">
