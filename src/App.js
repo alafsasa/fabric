@@ -913,34 +913,35 @@ function App() {
           tn = rectCT - ImageHeight;
         }
       }
-      //if(rectCL < ImageWidth){
-      //  ln = rectCL - ImageWidth;
-      //}else{
-      //  ln = rectCL - ImageWidth;
-      //}
-      //if(rectCT < ImageHeight){
-      //  tn = rectCT - ImageHeight;
-      //}else{
-      //  tn = rectCT - ImageHeight;
-      //}
+      //if image width & height is === 250
+      if(rectCL < ImageWidth){
+        ln = rectCL - ImageWidth;
+      }else{
+        ln = rectCL - ImageWidth;
+      }
+      if(rectCT < ImageHeight){
+        tn = rectCT - ImageHeight;
+      }else{
+        tn = rectCT - ImageHeight;
+      }
       console.log(ln);
       console.log(tn);
-      //var x = paperB.getObjects()[1];
-      ////crop the image - clip
-      //let rectcrop = new fabric.Rect({
-      //  left: ln,
-      //  top: tn,
-      //  width: paperB.getActiveObject().getScaledWidth(),
-      //  height: paperB.getActiveObject().getScaledHeight()
-      //});
-      //paperB.getObjects()[1].clipPath = rectcrop;
-      //paperB.getObjects()[1].selectable = true;
-      //console.log('image', x);
-      //imageObjB = x;
-      //paperB.remove(selectionRect);
-      //paperB.remove(x)
-      //paperB.renderAll();
-      //removeGarbageOnPaperB();
+      var x = paperB.getObjects()[1];
+      //crop the image - clip
+      let rectcrop = new fabric.Rect({
+        left: ln,
+        top: tn,
+        width: paperB.getActiveObject().getScaledWidth(),
+        height: paperB.getActiveObject().getScaledHeight()
+      });
+      paperB.getObjects()[1].clipPath = rectcrop;
+      paperB.getObjects()[1].selectable = true;
+      console.log('image', x);
+      imageObjB = x;
+      paperB.remove(selectionRect);
+      paperB.remove(x)
+      paperB.renderAll();
+      removeGarbageOnPaperB();
     }
     const removeGarbageOnPaperB = () => {
       //logics
