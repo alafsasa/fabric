@@ -858,6 +858,7 @@ function App() {
       paperB.add(paper.getActiveObject().set({selectable: false}));
       addSelectionRect();
       paperB.setActiveObject(selectionRect);
+      paperB.centerObject(paperB.getObjects()[1]);
       paperB.renderAll();
       paper.remove(paper.getActiveObject());
       paper.renderAll();
