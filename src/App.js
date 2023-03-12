@@ -889,7 +889,8 @@ function App() {
       console.log('T', paperB.getActiveObject().top);
       console.log('S-Width', paperB.getActiveObject().getScaledWidth());
       console.log('S-Height', paperB.getActiveObject().getScaledHeight());
-      console.log(paperB.getObjects()[1]);
+      console.log('scale-x',paperB.getObjects()[1].scaleX);
+      console.log('scale-y',paperB.getObjects()[1].scaleY);
       //clipping logics
       var ImageHeight = paperB.getObjects()[1].height / 2;
       var ImageWidth = paperB.getObjects()[1].width / 2;
@@ -904,34 +905,34 @@ function App() {
         var rT = ImageHeight/250;
         //check for rect L & T
         if(rectCL < ImageWidth){
-          ln = rectCL - ImageWidth;
+          ln = rectCL*paperB.getObjects()[1].scaleX - ImageWidth;
         }else{
-          ln = rectCL - ImageWidth;
+          ln = rectCL*paperB.getObjects()[1].scaleX - ImageWidth;
         }
         if(rectCT < ImageHeight){
-          tn = rectCT - ImageHeight;
+          tn = rectCT*paperB.getObjects()[1].scaleY - ImageHeight;
         }else{
-          tn = rectCT - ImageHeight;
+          tn = rectCT*paperB.getObjects()[1].scaleY - ImageHeight;
         }
       }
       //if image width & height is === 250
-      if(rectCL < ImageWidth){
-        ln = rectCL - ImageWidth;
-      }else{
-        ln = rectCL - ImageWidth;
-      }
-      if(rectCT < ImageHeight){
-        tn = rectCT - ImageHeight;
-      }else{
-        tn = rectCT - ImageHeight;
-      }
+      //if(rectCL < ImageWidth){
+      //  ln = rectCL - ImageWidth;
+      //}else{
+      //  ln = rectCL - ImageWidth;
+      //}
+      //if(rectCT < ImageHeight){
+      //  tn = rectCT - ImageHeight;
+      //}else{
+      //  tn = rectCT - ImageHeight;
+      //}
       console.log(ln);
       console.log(tn);
       var x = paperB.getObjects()[1];
       //crop the image - clip
       let rectcrop = new fabric.Rect({
-        left: ln,
-        top: tn,
+        left: -694,
+        top: -1060,
         width: paperB.getActiveObject().getScaledWidth(),
         height: paperB.getActiveObject().getScaledHeight()
       });
