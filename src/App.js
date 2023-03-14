@@ -896,7 +896,8 @@ function App() {
       var ImageWidth = paperB.getObjects()[1].width / 2;
       var rectCL = paperB.getActiveObject().left;
       var rectCT = paperB.getActiveObject().top;
-      var ln = 0; var tn = 0;
+      //var ln = paperB.getActiveObject().left; var tn = paperB.getActiveObject().top;
+      var ln =0; var tn = 0;
       //check if the width & height goes beyond default 250
       //if(ImageHeight && ImageWidth > 250){
       //  //do something here
@@ -931,17 +932,18 @@ function App() {
       console.log('image', paperB.getObjects()[1]);
       var cropped = new Image();
       var imgg;
+      paperB.remove(selectionRect);
       cropped.src = paperB.toDataURL({
-        left: 0,
-        top: 0,
-        width: 200,
-        height: 200
+        left: ln,
+        top: tn,
+        width: rectCL,
+        height: rectCT
       });
       cropped.onload = () => {
         paperB.clear(); //clear the canvas
         imgg = new fabric.Image(cropped);
-        imgg.left = 0;
-        imgg.top = 0;
+        imgg.left = ln;
+        imgg.top = tn;
         imgg.setCoords();
         paperB.add(imgg);
         paperB.renderAll();
