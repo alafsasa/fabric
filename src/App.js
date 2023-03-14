@@ -898,23 +898,23 @@ function App() {
       var rectCT = paperB.getActiveObject().top;
       var ln = 0; var tn = 0;
       //check if the width & height goes beyond default 250
-      if(ImageHeight && ImageWidth > 250){
-        //do something here
-        //get the ratio h - 4.96 w - 3.496
-        var rL = ImageWidth/250;
-        var rT = ImageHeight/250;
-        //check for rect L & T
-        if(rectCL < ImageWidth){
-          ln = rectCL*paperB.getObjects()[1].scaleX - ImageWidth;
-        }else{
-          ln = rectCL*paperB.getObjects()[1].scaleX - ImageWidth;
-        }
-        if(rectCT < ImageHeight){
-          tn = rectCT*paperB.getObjects()[1].scaleY - ImageHeight;
-        }else{
-          tn = rectCT*paperB.getObjects()[1].scaleY - ImageHeight;
-        }
-      }
+      //if(ImageHeight && ImageWidth > 250){
+      //  //do something here
+      //  //get the ratio h - 4.96 w - 3.496
+      //  //var rL = ImageWidth/250;
+      //  //var rT = ImageHeight/250;
+      //  //check for rect L & T
+      //  if(rectCL < ImageWidth){
+      //    ln = rectCL*paperB.getObjects()[1].scaleX - ImageWidth;
+      //  }else{
+      //    ln = rectCL*paperB.getObjects()[1].scaleX - ImageWidth;
+      //  }
+      //  if(rectCT < ImageHeight){
+      //    tn = rectCT*paperB.getObjects()[1].scaleY - ImageHeight;
+      //  }else{
+      //    tn = rectCT*paperB.getObjects()[1].scaleY - ImageHeight;
+      //  }
+      //}
       //if image width & height is === 250
       //if(rectCL < ImageWidth){
       //  ln = rectCL - ImageWidth;
@@ -928,22 +928,40 @@ function App() {
       //}
       console.log(ln);
       console.log(tn);
-      var x = paperB.getObjects()[1];
-      //crop the image - clip
-      let rectcrop = new fabric.Rect({
-        left: -694,
-        top: -1060,
-        width: paperB.getActiveObject().getScaledWidth(),
-        height: paperB.getActiveObject().getScaledHeight()
+      console.log('image', paperB.getObjects()[1]);
+      var cropped = new Image();
+      var imgg;
+      cropped.src = paperB.toDataURL({
+        left: 0,
+        top: 0,
+        width: 200,
+        height: 200
       });
-      paperB.getObjects()[1].clipPath = rectcrop;
-      paperB.getObjects()[1].selectable = true;
-      console.log('image', x);
-      imageObjB = x;
-      paperB.remove(selectionRect);
-      paperB.remove(x)
-      paperB.renderAll();
-      removeGarbageOnPaperB();
+      cropped.onload = () => {
+        paperB.clear(); //clear the canvas
+        imgg = new fabric.Image(cropped);
+        imgg.left = 0;
+        imgg.top = 0;
+        imgg.setCoords();
+        paperB.add(imgg);
+        paperB.renderAll();
+      }
+      //var x = paperB.getObjects()[1];
+      ////crop the image - clip
+      //let rectcrop = new fabric.Rect({
+      //  left: ln,
+      //  top: tn,
+      //  width: 432,
+      //  height: 432
+      //});
+      //paperB.getObjects()[1].clipPath = rectcrop;
+      //paperB.getObjects()[1].selectable = true;
+      //console.log('image', x);
+      //imageObjB = x;
+      //paperB.remove(selectionRect);
+      //paperB.remove(x)
+      //paperB.renderAll();
+      //removeGarbageOnPaperB();
     }
     const removeGarbageOnPaperB = () => {
       //logics
