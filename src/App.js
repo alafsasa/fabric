@@ -892,8 +892,8 @@ function App() {
       console.log('scale-x',paperB.getObjects()[1].scaleX);
       console.log('scale-y',paperB.getObjects()[1].scaleY);
       //clipping logics
-      var ImageHeight = paperB.getObjects()[1].height / 2;
-      var ImageWidth = paperB.getObjects()[1].width / 2;
+      //var ImageHeight = paperB.getObjects()[1].height / 2;
+      //var ImageWidth = paperB.getObjects()[1].width / 2;
       var rectCL = paperB.getActiveObject().left;
       var rectCT = paperB.getActiveObject().top;
       var rectSelectWidth = paperB.getActiveObject().getScaledWidth();
@@ -949,9 +949,14 @@ function App() {
         imgg.left = rectCL;
         imgg.top = rectCT;
         imgg.setCoords();
-        paperB.add(imgg);
+        //console.log('imagg', imgg);
+        //paperB.add(imgg);
+        paper.add(imgg);
         paperB.renderAll();
+        paper.renderAll();
+        //imageObjB = imgg;
       }
+      console.log(imageObjB);
       //var x = paperB.getObjects()[1];
       ////crop the image - clip
       //let rectcrop = new fabric.Rect({
@@ -965,9 +970,9 @@ function App() {
       //console.log('image', x);
       //imageObjB = x;
       //paperB.remove(selectionRect);
-      //paperB.remove(x)
+      //paperB.remove(imageObj)
       //paperB.renderAll();
-      //removeGarbageOnPaperB();
+      removeGarbageOnPaperB();
     }
     const removeGarbageOnPaperB = () => {
       //logics
@@ -981,10 +986,10 @@ function App() {
       //paperB.renderAll();
       //paperB.clear().renderAll();
       //imageObjB.setCoords();
-      console.log('toscale', imageObjB);
+      //console.log('toscale', imageObjB);
       //imageObjB.set({scaleX: 2})
-      paper.add(imageObjB);
-      paper.renderAll();
+      //paper.add(imageObjB);
+      //paper.renderAll();
     }
     const handleUnitTest = () => {
       //logics
