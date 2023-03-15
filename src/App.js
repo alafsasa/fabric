@@ -60,8 +60,8 @@ function App() {
   }
   //logic
   useEffect(()=>{
-    var canvas = new fabric.Canvas(kanvas.current, {backgroundColor: '#ddd', isDrawingMode: false});
-    var canvasB = new fabric.Canvas(kanvasB.current, {backgroundColor: '#f4f8fb', isDrawingMode: false});
+    var canvas = new fabric.Canvas(kanvas.current, {backgroundColor: '#f4f8fb', isDrawingMode: false});
+    var canvasB = new fabric.Canvas(kanvasB.current, {isDrawingMode: false});
     canvasB.preserveObjectStacking = true;
     //make canvas publicly available
     exposeCanvas(canvas);
@@ -1018,7 +1018,7 @@ function App() {
         <div className='col-sm-6'>
           <canvas ref={kanvas} width={500} height={500}></canvas>
         </div>
-        <div className='col-sm-6'>
+        <div className='col-sm-6' style={{border: '2px solid red'}}>
           <canvas ref={kanvasB} width={500} height={500}></canvas>
         </div>
         <div className='col-sm-12'>
