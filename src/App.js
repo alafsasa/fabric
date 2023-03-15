@@ -952,11 +952,12 @@ function App() {
         //console.log('imagg', imgg);
         //paperB.add(imgg);
         paper.add(imgg);
+        //paperB.remove(imgg);
         paperB.renderAll();
         paper.renderAll();
         //imageObjB = imgg;
       }
-      console.log(imageObjB);
+      //console.log(imageObjB);
       //var x = paperB.getObjects()[1];
       ////crop the image - clip
       //let rectcrop = new fabric.Rect({
