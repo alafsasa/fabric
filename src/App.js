@@ -623,7 +623,10 @@ function App() {
     const saveCanvasToImage = () => {
       //logics
       //full quality
-      const dataURL = paper.toDataURL("image/jpeg", 0.5);
+      const dataURL = paper.toDataURL({
+        format: 'jpeg',
+        quality: 1
+      });
       //medium quality
       //const mediumQuality = paper.toDataURL('image/jpeg', 0.5);
       //low quality
@@ -941,7 +944,8 @@ function App() {
         left: rectCL,
         top: rectCT,
         width: Math.abs(rectSelectWidth),
-        height: Math.abs(rectSelectHeight)
+        height: Math.abs(rectSelectHeight),
+        quality: 1
       });
       cropped.onload = () => {
         paperB.clear(); //clear the canvas
