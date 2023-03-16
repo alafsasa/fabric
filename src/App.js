@@ -4,6 +4,8 @@ import { fabric } from 'fabric';
 import { ColorPicker, useColor } from 'react-color-palette';
 import Modal from 'react-modal'
 import 'react-color-palette/lib/css/styles.css';
+import { Link } from 'react-router-dom';
+//import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 //global
 var isSelectedFlag = false;
@@ -16,7 +18,7 @@ var cropImageFlag = false;
 var selectionRect;
 //var drawFreeHandFlag = false;
 var imageObj;
-var imageObjB;
+//var imageObjB;
 
 //custom styles
 const customStyles = {
@@ -1042,6 +1044,9 @@ function App() {
             <button className='btn btn-info' onClick={handleKropOut}>Krop-Out</button>
             <button className='btn btn-warning' onClick={handleUnitTest}>Unit-Test</button>
             <button className='btn btn-secondary' onClick={handleDeleteObjectsCanvasB}>Garbage</button>
+            <Link to='/lueminour'>
+              <button className='btn btn-danger'>Lueminour</button>
+            </Link>
             <button className='btn btn-success' onClick={saveCanvasToImage}>Save</button>
             <Modal isOpen={modalIsOpen} style={customStyles} contentLabel="Modal-x">
               <button className='btn btn-danger' onClick={closeModal}>close</button>
